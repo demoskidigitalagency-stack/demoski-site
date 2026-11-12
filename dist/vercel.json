@@ -26,6 +26,11 @@
       "source": "/social-media-management-training/",
       "destination": "/training/",
       "permanent": false
+    },
+    {
+      "source": "/affilate/",
+      "destination": "/affiliate/",
+      "permanent": false
     }
   ],
   "headers": [

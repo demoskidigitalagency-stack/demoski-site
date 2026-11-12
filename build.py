@@ -141,7 +141,7 @@ def page(path, title, desc, acct, main, body_attrs="", script="site.js", noindex
 {main}
 <footer><div class="wrap">
   <span>© 2026 Demoski Digital Agency · Nigeria and worldwide</span>
-  <span><a href="/packages/">Packages</a> · <a href="/training/">Training</a> · <a href="/portfolio/">Proof</a> · <a href="/about/">About</a></span>
+  <span><a href="/packages/">Packages</a> · <a href="/training/">Training</a> · <a href="/portfolio/">Proof</a> · <a href="/about/">About</a> · <a href="/affiliate/">Affiliates</a></span>
   <span>WhatsApp +234 706 615 3757 · <a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a></span>
 </div></footer>
 <div class="bar" role="region" aria-label="Contact"><span class="sum" id="barSum"></span><a class="btn" id="barBtn" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
@@ -230,6 +230,13 @@ training = f"""<main>
   <h1>Learn the skill from people who <mark>use it</mark> daily.</h1>
   <p class="lede">Six programmes, from first logo to full growth strategy. Choose one and ask us for the price and start date on WhatsApp.</p>
 </div></div>
+<section class="sec"><div class="wrap">
+  <p class="label">Open for enrolment now</p>
+  <div class="grid3" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+    <div><h3>AutoBuild</h3><p>Build and automate a full sales funnel on free hosting. Four self-paced modules. ₦25,000.</p><a class="more" href="/autobuild-funnel/">See AutoBuild →</a></div>
+    <div><h3>AI Funnel Accelerator</h3><p>AI-built funnels wired to WhatsApp, with a live workshop and a 14-day refund guarantee. ₦25,000.</p><a class="more" href="/ai-funnel-generator/">See the Accelerator →</a></div>
+  </div>
+</div></section>
 <section class="sec"><div class="wrap">
   <p class="label">Programmes</p>
   <div style="margin-top:12px;border-top:1px solid var(--line)">{c_html}</div>
@@ -406,6 +413,113 @@ dfy = f"""<main>
 </div></section>
 </main>"""
 
+# ---------------------------------------------------------------- COURSE SALES PAGES
+def course_page(label, h1, lede, price, price_note, mod_label, mods, extras_label, extras, who, faq, closing):
+    mod_html = "".join('<div class="course"><div><p class="meta">%s</p><h3 style="margin-top:6px">%s</h3></div><ul style="grid-column:span 2">%s</ul></div>' % (
+        e(tag), e(name), "".join("<li>%s</li>" % e(i) for i in items)) for tag, name, items in mods)
+    ex_html = "".join("<div><h3>%s</h3><p>%s</p></div>" % (e(a), e(b)) for a, b in extras)
+    who_html = "".join("<span>%s</span>" % e(w) for w in who)
+    faq_html = "".join('<details%s><summary>%s</summary><p>%s</p></details>' % (" open" if i == 0 else "", e(q), e(a)) for i, (q, a) in enumerate(faq))
+    return f"""<main>
+<div class="phero"><div class="wrap">
+  <p class="label">{e(label)}</p>
+  <h1>{h1}</h1>
+  <p class="lede">{e(lede)}</p>
+  <p class="price mono">{e(price)} <span>{e(price_note)}</span></p>
+  <div class="btnrow"><a class="btn" data-wa="" target="_blank" rel="noopener">Enrol on WhatsApp</a></div>
+</div></div>
+<section class="sec"><div class="wrap">
+  <p class="label">{e(mod_label)}</p>
+  <div style="margin-top:12px;border-top:1px solid var(--line)">{mod_html}</div>
+</div></section>
+<section class="sec band"><div class="wrap">
+  <p class="label">{e(extras_label)}</p>
+  <div class="grid3">{ex_html}</div>
+</div></section>
+<section class="sec"><div class="wrap">
+  <p class="label">Who it is for</p>
+  <div class="niches" style="margin-top:14px">{who_html}</div>
+  <h2 style="margin-top:44px">Straight answers.</h2>
+  <div class="faq">{faq_html}</div>
+  <p class="intro" style="margin-top:28px">{e(closing)}</p>
+</div></section>
+</main>"""
+
+autobuild = course_page(
+  "Course · AutoBuild", "Build a full funnel in <mark>30 minutes.</mark> Pay for no tools.",
+  "Four self-paced modules that take you from free hosting to a live, automated sales funnel. No WordPress, no coding.",
+  "₦25,000", "current price · listed full price ₦50,000 · one payment",
+  "The four modules", [
+   ("Module 01", "Free hosting and free domain", ["Choosing the free hosting platform", "Step-by-step setup", "Connecting a free domain", "Putting your pages live"]),
+   ("Module 02", "The complete funnel build", ["A landing page built without templates or drag-and-drop", "Payments with Paystack, Flutterwave, PayPal or another processor", "Thank-you page and lead capture flow", "Where calls to action go and why"]),
+   ("Module 03", "Automation", ["Your own automation server with n8n", "Databases for leads and customers", "Chatbots that answer from your own knowledge base", "AI assistants that qualify leads and reply", "Follow-up by email, live chat, WhatsApp, Instagram and Telegram", "Simple dashboards for leads and sales"]),
+   ("Module 04", "The speed framework", ["A funnel in under 30 minutes", "Duplicating and customising quickly", "Six steps: imagine, describe, generate, customise, deploy, automate"]),
+  ],
+  "Included with the course", [
+   ("Client acquisition system", "How to position this skill as a premium service, find business owners and close them."),
+   ("Private community", "Feedback on your pages, shared opportunities and ongoing updates."),
+   ("Direct support", "Ask questions, get unstuck and get feedback on what you build."),
+  ],
+  ["Ads professionals who never learned funnels", "Business owners who want better sales pages", "Marketers and designers", "Beginners with no coding experience"],
+  [("Can beginners join?", "Yes. It starts from zero and follows the order of a real project."),
+   ("Do I need to code?", "No. Every step is shown."),
+   ("Do I need WordPress?", "No. AutoBuild uses a lighter approach that replaces WordPress and plugin stacks."),
+   ("Can I really use free hosting?", "Yes. Module 01 covers the free tiers and how to set them up."),
+   ("Does it cover automation?", "Yes. Module 03 covers n8n, databases, messaging channels and AI agents."),
+   ("How long is it?", "Four self-paced modules. You set the pace.")],
+  "To enrol, send the WhatsApp message from the bar below. We reply with payment details and your access.")
+
+aifunnel = course_page(
+  "Course · AI Funnel Accelerator", "AI-powered funnels that bring leads <mark>on autopilot.</mark>",
+  "A system for building sales funnels with AI, wiring them to WhatsApp, and publishing them anywhere. Full refund within 14 days if you do not see the value.",
+  "₦25,000", "one payment · 14-day refund guarantee",
+  "What you get", [
+   ("Part 1", "AI Funnel Blueprint", ["Building modern funnels from scratch with AI-assisted workflows"]),
+   ("Part 2", "AI Automation Playbook", ["Connecting funnels to AI workflows that run and reply around the clock"]),
+   ("Part 3", "WhatsApp Lead Engine", ["Capturing, qualifying and following up with prospects on WhatsApp"]),
+   ("Part 4", "One-Click Deployment System", ["Publishing to WordPress, Netlify, Vercel or Systeme.io"]),
+   ("Part 5", "Prompt Library", ["Prompts for funnels, marketing and automation, added to over time"]),
+  ],
+  "How it runs", [
+   ("Instant access", "Modules, templates and workflows open as soon as you enrol."),
+   ("Live funnel workshop", "A live session where a complete automated funnel is built from start to finish. Ask us for the next date."),
+   ("The guarantee", "Complete the training, use the templates, follow the system. If you do not see the value, tell us within 14 days of enrolling for a full refund."),
+  ],
+  ["Business owners", "Coaches", "Freelancers", "Agencies", "Digital marketers", "Course creators", "Virtual assistants"],
+  [("How do I enrol?", "Send the WhatsApp message from the bar below. We reply with payment details and your access."),
+   ("Is it live or recorded?", "The modules are available on demand. The funnel workshop is live."),
+   ("What if it is not for me?", "Ask for a full refund within 14 days of enrolling.")],
+  "Questions before you enrol? Ask on WhatsApp and a person answers.")
+
+affiliate = """<main>
+<div class="phero"><div class="wrap">
+  <p class="label">Affiliate programme</p>
+  <h1>Refer a business. Earn <mark>20%.</mark></h1>
+  <p class="lede">You know business owners who need marketing help. Send them to us and earn a commission on their first package or training enrolment.</p>
+  <div class="btnrow"><a class="btn" data-wa="" target="_blank" rel="noopener">Apply on WhatsApp</a></div>
+</div></div>
+<section class="sec band"><div class="wrap">
+  <p class="label">How it works</p>
+  <ol class="timeline" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    <li><span class="day">Step 1</span><h3>Apply</h3><p>Send a short application on WhatsApp.</p></li>
+    <li><span class="day">Step 2</span><h3>Share your link</h3><p>You get a unique referral link to share with your network.</p></li>
+    <li><span class="day">Step 3</span><h3>Get paid</h3><p>When someone you referred buys, you earn 20% of that first purchase.</p></li>
+  </ol>
+</div></section>
+<section class="sec"><div class="wrap">
+  <p class="label">What 20% looks like</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>They buy</th><th>Price</th><th>You earn</th></tr></thead>
+    <tbody>
+      <tr><td>AutoBuild course</td><td class="mono">₦25,000</td><td class="mono">₦5,000</td></tr>
+      <tr><td>AI Funnel Accelerator</td><td class="mono">₦25,000</td><td class="mono">₦5,000</td></tr>
+      <tr><td>A service package</td><td class="mono">Quoted per client</td><td class="mono">20% of the quote</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">Commission applies to a referred client's first package or training enrolment. All terms are subject to the Demoski Digital affiliate agreement, which you receive when you apply.</p>
+</div></section>
+</main>"""
+
 # ---------------------------------------------------------------- WRITE
 if os.path.exists(DIST): shutil.rmtree(DIST)
 os.makedirs(os.path.join(DIST, "assets"))
@@ -441,13 +555,24 @@ page("/done-for-you/", "Done-For-You Marketing Setup | Demoski Digital Agency",
      attrs("Hi Demoski. I want the Done-For-You marketing setup (₦2,400,000). Please send me the brief questionnaire.", "₦2,400,000 · built in 14 days",
            "Hi Demoski. I want the Done-For-You marketing setup (₦2,400,000). Ad platforms I want:", "Please send me the brief questionnaire.", "Send my brief", maxn=3))
 
-urls = ["/", "/packages/", "/done-for-you/", "/training/", "/about/"]
+page("/autobuild-funnel/", "AutoBuild Funnel Course | Demoski Digital Agency",
+     "A four-module, self-paced course on building and automating sales funnels with free hosting, payments, n8n and AI agents. No coding.",
+     "AutoBuild", autobuild, attrs("Hi Demoski. I want to enrol in AutoBuild (₦25,000). Please send me the payment details.", "AutoBuild · ₦25,000"))
+page("/ai-funnel-generator/", "AI Funnel Accelerator | Demoski Digital Agency",
+     "Build AI-powered sales funnels, automate WhatsApp follow-up and deploy anywhere. Includes a live funnel workshop and a 14-day refund guarantee.",
+     "AI Funnel Accelerator", aifunnel, attrs("Hi Demoski. I want to enrol in the AI Funnel Accelerator (₦25,000). Please send me the payment details and the next workshop date.", "AI Funnel Accelerator · ₦25,000"))
+page("/affiliate/", "Affiliate Programme | Demoski Digital Agency",
+     "Refer business owners to Demoski Digital and earn 20% commission on their first package or training enrolment.",
+     "Affiliates", affiliate, attrs("Hi Demoski. I want to apply to your affiliate programme.", "Earn 20% per referral"))
+
+urls = ["/", "/packages/", "/done-for-you/", "/training/", "/autobuild-funnel/", "/ai-funnel-generator/", "/affiliate/", "/about/"]
 open(os.path.join(DIST, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
 open(os.path.join(DIST, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
 json.dump({
   "cleanUrls": True, "trailingSlash": True,
   "redirects": [{"source": s, "destination": "/", "permanent": False} for s in ["/sample-page/", "/elementor-173/", "/fresh-page/", "/blog/"]]
-      + [{"source": "/social-media-management-training/", "destination": "/training/", "permanent": False}],
+      + [{"source": "/social-media-management-training/", "destination": "/training/", "permanent": False},
+         {"source": "/affilate/", "destination": "/affiliate/", "permanent": False}],
   # Remove this header block on launch day. It keeps the preview out of Google.
   "headers": [{"source": "/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}]}]
 }, open(os.path.join(DIST, "vercel.json"), "w"), indent=2)
