@@ -65,6 +65,7 @@ td .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spaci
 .price span{display:block;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.04em;margin-top:4px}
 tr.total td{border-top:2px solid var(--ink);font-weight:600}
 tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
+.top nav{gap:8px 16px;font-size:13.5px}
 .navmore{position:relative}
 .navmore summary{cursor:pointer;color:var(--band-muted);list-style:none}
 .navmore summary::-webkit-details-marker{display:none}
@@ -74,6 +75,7 @@ tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
 .top nav .navmenu a{padding:9px 16px;color:var(--band-ink);display:grid;gap:1px;border:0}
 .top nav .navmenu a:hover,.top nav .navmenu a[aria-current="page"]{background:var(--band-line)}
 .navmenu small{font-family:var(--mono);font-size:11px;color:var(--band-muted)}
+@media(max-width:1100px){.top{position:relative;top:0}}
 @media(max-width:700px){.navmore{position:static}.navmenu{left:16px;right:16px;top:100%;min-width:0}}
 .footgrid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px 32px}
 .footgrid>div{display:grid;gap:6px;align-content:start;font-size:14px}
@@ -124,17 +126,17 @@ SITE_JS = r"""
 })();
 """
 
-NAV = [("/", "Planner"), ("/packages/", "Packages"), ("/training/", "Training"), ("/portfolio/", "Proof"), ("/about/", "About")]
+NAV = [("/", "Planner"), ("/packages/", "Packages"), ("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel"), ("/affiliate/", "Affiliates"), ("/portfolio/", "Proof"), ("/about/", "About")]
 WP = "https://demoskidigital.com"  # pages still served by WordPress; change to the subdomain at launch
-MORE = [("/done-for-you/", "Done-For-You Setup", "Your whole system built in 14 days"),
+OFFERS = [("/done-for-you/", "Done-For-You Setup", "Your whole system built in 14 days"),
         ("/autobuild-funnel/", "AutoBuild", "Funnel-building course"),
         ("/ai-funnel-generator/", "AI Funnel Accelerator", "AI funnels with WhatsApp follow-up"),
         ("/affiliate/", "Affiliates", "Earn 20% per referral"),
         (WP + "/template-bundle-customizer/", "Template Bundle", "54 ready-made business templates"),
-        (WP + "/course-os/", "Course OS", "Course platform for creators"),
-        (WP + "/free-resource/", "Free Resources", "Marketing guides")]
+        (WP + "/course-os/", "Course OS", "Course platform for creators")]
+MORE = [o for o in OFFERS if o[1] in ("Done-For-You Setup", "Template Bundle", "Course OS")]
 FOOT = [("Agency", [("/", "Campaign planner"), ("/packages/", "Packages"), ("/done-for-you/", "Done-For-You Setup"), ("/portfolio/", "Proof"), ("/about/", "About")]),
-        ("Learn", [("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel Accelerator"), (WP + "/free-resource/", "Free Resources")]),
+        ("Learn", [("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel Accelerator")]),
         ("Products", [(WP + "/template-bundle-customizer/", "Template Bundle"), (WP + "/course-os/", "Course OS"), ("/affiliate/", "Affiliates")])]
 FAVICON = "data:image/svg+xml," + "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2310131C'/%3E%3Ctext x='5' y='24' font-family='Arial' font-weight='900' font-size='22' fill='%23ECEEF2'%3ED%3C/text%3E%3Ccircle cx='25' cy='22' r='3' fill='%23F0431A'/%3E%3C/svg%3E"
 
@@ -370,7 +372,7 @@ about = """<main>
 
 # ---------------------------------------------------------------- HOME
 home = home_main.replace('href="#build"', 'href="#build"')
-offers = "".join('<a href="%s"><b>%s →</b><span>%s</span></a>' % (h, t, d) for h, t, d in MORE)
+offers = "".join('<a href="%s"><b>%s →</b><span>%s</span></a>' % (h, t, d) for h, t, d in OFFERS)
 home = home.replace('<section class="sec" id="faq">', '<section class="sec" id="more"><div class="wrap"><p class="label">Everything else we run</p><h2 style="margin-top:10px">More from Demoski.</h2><div class="offers">' + offers + '</div></div></section>\n\n<section class="sec" id="faq">')
 home = home.replace(
     '<tbody id="courseRows"></tbody>\n  </table></div>',
