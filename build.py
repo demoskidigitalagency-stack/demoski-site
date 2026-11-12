@@ -99,7 +99,7 @@ footer a:hover{text-decoration:underline}
 
 SITE_JS = r"""
 (function(){
-  var WA='https://wa.me/2347066153757?text=',b=document.body,picks=[];
+  var WA='https://wa.me/2347066153757?text=',b=document.querySelector('[data-msg]')||document.body,picks=[];
   var bar=document.getElementById('barBtn'),sum=document.getElementById('barSum');
   var single=b.dataset.single==='1';
   function msg(){

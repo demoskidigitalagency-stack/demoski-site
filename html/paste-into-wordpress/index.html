@@ -1,0 +1,565 @@
+<!-- Demoski Digital: index. Paste into an Elementor HTML widget on a page using the "Elementor Canvas" template. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: the whole page is an ads-manager workspace. Full-bleed bands, a dense
+   console (planner + chart) as the hero, tables instead of cards, a budget bar
+   pinned to the bottom that carries the visitor's plan to WhatsApp. */
+:root{
+  --bg:#ECEEF2; --panel:#FFFFFF; --ink:#10131C; --muted:#5A6172; --line:#CDD2DC;
+  --spend:#F0431A; --spend-ink:#FFFFFF; --profit:#087A4E; --mark:#FFD23F; --mark-ink:#10131C;
+  --band:#10131C; --band-ink:#ECEEF2; --band-muted:#9AA2B4; --band-line:#2B3140;
+  --display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter-l:max(16px,env(safe-area-inset-left,0px)); --gutter-r:max(16px,env(safe-area-inset-right,0px));
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1017; --panel:#161A24; --ink:#EEF0F4; --muted:#98A0B2; --line:#2A3040;
+  --spend:#FF5A30; --spend-ink:#10131C; --profit:#35C98A; --mark:#FFD23F; --mark-ink:#10131C;
+  --band:#05070B; --band-ink:#EEF0F4; --band-muted:#8D95A8; --band-line:#232937; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1017; --panel:#161A24; --ink:#EEF0F4; --muted:#98A0B2; --line:#2A3040;
+  --spend:#FF5A30; --spend-ink:#10131C; --profit:#35C98A; --mark:#FFD23F; --mark-ink:#10131C;
+  --band:#05070B; --band-ink:#EEF0F4; --band-muted:#8D95A8; --band-line:#232937; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-bottom:88px}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;line-height:1}
+p{margin:0}
+.wrap{padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+@media(min-width:900px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:3px solid var(--spend);outline-offset:2px}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* top bar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--band)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--band);color:var(--band-ink)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:20px;text-decoration:none;letter-spacing:-.03em}
+.brand i{font-style:normal;color:var(--spend)}
+.acct{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--band-muted);min-width:0}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--profit);flex:none;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.top nav{margin-left:auto;display:flex;gap:18px;font-size:14px;flex-wrap:wrap}
+.top nav a{text-decoration:none;color:var(--band-muted)}
+.top nav a:hover{color:var(--band-ink)}
+
+/* hero console */
+.hero .wrap{display:grid;gap:28px;padding-block:36px 44px}
+@media(min-width:1000px){.hero .wrap{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:start;padding-block:56px 64px}}
+.hero h1{font-size:clamp(44px,7.2vw,104px);font-weight:800}
+.hero h1 mark{background:var(--mark);color:var(--mark-ink);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.lede{font-size:clamp(17px,1.5vw,20px);color:var(--muted);max-width:52ch;margin-top:20px}
+.doors{display:grid;gap:10px;margin-top:28px}
+@media(min-width:520px){.doors{grid-template-columns:1fr 1fr}}
+.door{text-align:left;background:var(--panel);border:2px solid var(--line);padding:16px 18px;display:grid;gap:4px}
+.door b{font-family:var(--display);font-size:22px;letter-spacing:-.02em}
+.door span{font-size:14px;color:var(--muted)}
+.door[aria-pressed="true"]{border-color:var(--ink);box-shadow:6px 6px 0 var(--spend)}
+
+.console{background:var(--panel);border:2px solid var(--ink);min-width:0}
+.console-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 16px;border-bottom:2px solid var(--ink);flex-wrap:wrap}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--line);color:var(--muted)}
+.pill.est{background:var(--mark);color:var(--mark-ink);border-color:var(--mark)}
+.controls{display:grid;gap:18px;padding:18px 16px;border-bottom:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:transparent;border:1px solid var(--line);padding:6px 11px;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row2{display:grid;gap:18px}
+@media(min-width:620px){.row2{grid-template-columns:1.4fr 1fr}}
+.budget-val{font-family:var(--mono);font-weight:700;font-size:26px;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--spend);margin-top:8px}
+.field input{width:100%;margin-top:8px;padding:9px 10px;font-family:var(--mono);font-size:16px;background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--line)}
+@media(min-width:720px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kpi{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.kpi b{display:block;font-family:var(--mono);font-size:clamp(17px,1.9vw,22px);font-variant-numeric:tabular-nums;margin-top:4px;overflow-wrap:anywhere}
+.kpi.win b{color:var(--profit)}
+.chartbox{padding:14px 16px 6px}
+.chartbox canvas{display:block;width:100%;height:220px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px}
+details.assume{border-top:1px solid var(--line);padding:12px 16px;font-size:14px}
+details.assume summary{cursor:pointer;color:var(--muted)}
+.assume-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.assume p{color:var(--muted);margin-top:10px;font-size:13px}
+.tracks{display:grid;padding:6px 0}
+.track{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line);padding:13px 16px}
+.track:last-child{border-bottom:0}
+.track b{font-family:var(--display);font-size:19px;letter-spacing:-.01em}
+.track small{grid-column:1;color:var(--muted);font-size:14px}
+.track em{grid-row:1/3;grid-column:2;align-self:center;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right}
+.track[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.track[aria-pressed="true"] small,.track[aria-pressed="true"] em{color:var(--bg);opacity:.75}
+
+/* sections */
+section{border-top:2px solid var(--ink)}
+.sec .wrap{padding-block:52px}
+.sec h2{font-size:clamp(34px,5vw,68px);font-weight:800;max-width:18ch}
+.sec .intro{color:var(--muted);max-width:60ch;margin-top:14px;font-size:17px}
+.tablewrap{overflow-x:auto;margin-top:28px;border:2px solid var(--ink);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:500;padding:10px 14px;border-bottom:2px solid var(--ink);white-space:nowrap}
+td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{font-family:var(--display);font-weight:700;font-size:19px;white-space:nowrap}
+td.mono{white-space:nowrap}
+
+.band{background:var(--band);color:var(--band-ink);border-top:0}
+.band .label{color:var(--band-muted)}
+.band .intro{color:var(--band-muted)}
+.timeline{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:0}
+@media(min-width:900px){.timeline{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.timeline li{border-top:1px solid var(--band-line);padding:16px 16px 20px 0}
+@media(min-width:900px){.timeline li{border-top:3px solid var(--band-line);padding-right:20px}.timeline li:first-child{border-top-color:var(--spend)}}
+.timeline .day{font-family:var(--mono);font-size:13px;color:var(--mark)}
+.timeline h3{font-size:24px;margin:8px 0 6px}
+.timeline p{color:var(--band-muted);font-size:15px}
+
+.proof{display:grid;gap:14px;margin-top:28px}
+@media(min-width:800px){.proof{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.slot{border:2px dashed var(--line);padding:16px;display:grid;gap:10px;align-content:start;min-height:260px}
+.slot .shot{aspect-ratio:16/10;max-width:100%;background:repeating-linear-gradient(135deg,transparent 0 10px,var(--line) 10px 11px);display:grid;place-items:center;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);padding:12px}
+.slot dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+.slot dt{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-top:3px}
+.slot dd{margin:0;color:var(--muted)}
+
+.founder{display:grid;gap:28px;margin-top:8px}
+@media(min-width:900px){.founder{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;align-items:end}}
+.founder blockquote{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(36px,5.6vw,84px);line-height:.98;letter-spacing:-.03em}
+.founder blockquote span{color:var(--spend)}
+.founder .who{display:grid;gap:10px;font-size:16px}
+.founder .who p{color:var(--muted)}
+.niches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.niches span{font-family:var(--mono);font-size:12px;border:1px solid var(--line);padding:4px 8px}
+
+.faq{margin-top:24px;border-top:1px solid var(--line);max-width:900px}
+.faq details{border-bottom:1px solid var(--line);padding:16px 0}
+.faq summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:21px}
+.faq p{color:var(--muted);margin-top:10px;max-width:65ch}
+
+.handoff{display:grid;gap:24px;margin-top:28px}
+@media(min-width:900px){.handoff{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}}
+.msg{background:var(--panel);border:2px solid var(--ink);padding:18px;font-size:16px;white-space:pre-wrap;box-shadow:8px 8px 0 var(--profit)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--spend);color:var(--spend-ink);border:2px solid var(--spend);padding:13px 20px;font-weight:600;text-decoration:none;font-size:16px}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.contact{font-family:var(--mono);font-size:14px;display:grid;gap:6px;margin-top:20px;user-select:all}
+footer .wrap{padding-block:28px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+/* budget bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--band);color:var(--band-ink);border-top:3px solid var(--spend);
+  padding:10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom,0px)) var(--gutter-l);display:flex;align-items:center;gap:14px;justify-content:space-between}
+.bar .sum{font-family:var(--mono);font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--band-muted)}
+.bar .sum b{color:var(--band-ink)}
+.bar .btn{padding:10px 16px;flex:none;font-size:15px}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+
+/* ---- subpages ---- */
+.top nav a[aria-current="page"]{color:var(--band-ink);border-bottom:2px solid var(--spend)}
+.phero .wrap{padding-block:48px 40px}
+.phero h1{font-size:clamp(42px,6.6vw,96px);font-weight:800;max-width:16ch;margin-top:14px}
+.phero h1 mark{background:var(--mark);color:var(--mark-ink);padding:0 .12em}
+.phero .lede{max-width:60ch}
+.group{margin-top:44px}
+.group h2{font-size:clamp(28px,3.4vw,44px)}
+.group>p{color:var(--muted);margin-top:8px;max-width:60ch}
+.group .tablewrap{margin-top:18px}
+td ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:grid;gap:2px}
+td .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--mark);color:var(--mark-ink);padding:2px 6px;margin-left:8px;vertical-align:middle;white-space:nowrap}
+.pick{background:transparent;border:2px solid var(--ink);padding:8px 12px;font-size:14px;font-weight:600;white-space:nowrap}
+.pick[aria-pressed="true"]{background:var(--profit);border-color:var(--profit);color:var(--panel)}
+.notes{margin-top:44px;display:grid;gap:10px;padding:20px;border:2px solid var(--ink);background:var(--panel);max-width:900px}
+.notes ul{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--muted)}
+.grid3{display:grid;gap:0;margin-top:28px;border-top:1px solid var(--line)}
+@media(min-width:760px){.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.grid3>div{padding:20px 20px 24px 0;border-bottom:1px solid var(--line)}
+.grid3 h3{font-size:24px;margin-bottom:8px}
+.grid3 p{color:var(--muted);font-size:15px}
+.band .grid3,.band .grid3>div{border-color:var(--band-line)}
+.band .grid3 p{color:var(--band-muted)}
+.course{border-bottom:1px solid var(--line);padding:18px 0;display:grid;gap:12px}
+@media(min-width:860px){.course{grid-template-columns:minmax(0,5fr) minmax(0,5fr) auto;gap:32px;align-items:start}}
+.course h3{font-size:28px}
+.course .meta{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+.course p{color:var(--muted);margin-top:8px}
+.course ul{margin:0;padding-left:18px;color:var(--muted);display:grid;gap:4px}
+.story{display:grid;gap:18px;max-width:68ch;font-size:18px;margin-top:24px}
+.story p{color:var(--muted)}
+.story strong{color:var(--ink)}
+.photo{aspect-ratio:4/5;max-width:100%;border:2px dashed var(--line);display:grid;place-items:center;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);padding:16px}
+.split{display:grid;gap:32px}
+@media(min-width:900px){.split{grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:56px}}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px}
+.tools span{font-family:var(--mono);font-size:12px;border:1px solid var(--band-line);padding:5px 9px;color:var(--band-muted)}
+.cta-line{margin-top:28px}
+.more{display:inline-block;margin-top:20px;font-weight:600}
+.case{border:2px solid var(--ink);background:var(--panel);padding:18px;display:grid;gap:6px;align-content:start}
+.case .big{font-size:clamp(44px,5vw,64px);font-weight:700;line-height:1;color:var(--profit);margin-top:8px}
+.case .what{font-family:var(--display);font-weight:700;font-size:20px}
+.case dl{margin:10px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+.case dt{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-top:2px}
+.case dd{margin:0}
+.src{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px}
+@media(min-width:800px){.proof.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.price{font-size:clamp(30px,4vw,52px);font-weight:700;margin-top:24px}
+.price span{display:block;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.04em;margin-top:4px}
+tr.total td{border-top:2px solid var(--ink);font-weight:600}
+tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
+.top nav{gap:8px 16px;font-size:13.5px}
+.navmore{position:relative}
+.navmore summary{cursor:pointer;color:var(--band-muted);list-style:none}
+.navmore summary::-webkit-details-marker{display:none}
+.navmore summary::after{content:" ▾"}
+.navmore summary:hover,.navmore[open] summary,.navmore summary.on{color:var(--band-ink)}
+.navmenu{position:absolute;right:0;top:calc(100% + 12px);z-index:20;background:var(--band);border:1px solid var(--band-line);border-top:3px solid var(--spend);min-width:270px;max-width:calc(100vw - 32px);display:grid;padding:6px 0}
+.top nav .navmenu a{padding:9px 16px;color:var(--band-ink);display:grid;gap:1px;border:0}
+.top nav .navmenu a:hover,.top nav .navmenu a[aria-current="page"]{background:var(--band-line)}
+.navmenu small{font-family:var(--mono);font-size:11px;color:var(--band-muted)}
+@media(max-width:1100px){.top{position:relative;top:0}}
+@media(max-width:700px){.navmore{position:static}.navmenu{left:16px;right:16px;top:100%;min-width:0}}
+.footgrid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px 32px}
+.footgrid>div{display:grid;gap:6px;align-content:start;font-size:14px}
+.footgrid .label{margin-bottom:4px}
+.offers{display:grid;gap:0;margin-top:28px;border-top:2px solid var(--ink)}
+@media(min-width:760px){.offers{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.offers a{display:grid;gap:4px;padding:18px 18px 20px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.offers a b{font-family:var(--display);font-size:24px;letter-spacing:-.01em}
+.offers a span{color:var(--muted);font-size:15px}
+.offers a:hover b{color:var(--spend)}
+.legal-about{font-size:18px;max-width:60ch;margin-top:12px}
+.legal-dl{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:16px}
+.legal-dl dt{color:var(--muted)}
+.legal-dl dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.legal-foot{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px 32px}
+.legal-foot p{margin-top:6px;max-width:70ch}
+footer .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
+footer a{text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+#demoski-root{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-bottom:88px}</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Demoski Digital", "legalName": "Demoski Designs and Geospatial Consult", "url": "https://demoskidigital.com", "telephone": "+2347066153757", "email": "hello@demoskidigital.com", "address": {"@type": "PostalAddress", "addressCountry": "NG"}}</script>
+<div id="demoski-root" >
+<header class="top"><div class="wrap">
+  <a class="brand" href="/">Demoski<i>.</i></a>
+  <span class="acct"><span class="dot"></span><span>Account preview: <span id="acctName">Your business</span></span></span>
+  <nav aria-label="Main"><a href="/" aria-current="page">Planner</a><a href="/packages/">Packages</a><a href="/done-for-you/">Done-For-You</a><a href="/training/">Training</a><a href="/autobuild-funnel/">AutoBuild</a><a href="/ai-funnel-generator/">AI Funnel</a><a href="/affiliate/">Affiliates</a><a href="/portfolio/">Proof</a><details class="navmore"><summary>More</summary><div class="navmenu"><a href="/about/">About<small>Who runs your account</small></a><a href="/contact/">Contact Us<small>Phone, WhatsApp and email</small></a><a href="https://demoskidigital.com/template-bundle-customizer/">Template Bundle<small>54 ready-made business templates</small></a><a href="https://demoskidigital.com/course-os/">Course OS<small>Course platform for creators</small></a></div></details></nav>
+</div></header>
+<main id="top">
+<div class="hero"><div class="wrap">
+  <div>
+    <p class="label">Demoski Digital Agency · Lagos, serving clients worldwide</p>
+    <h1 style="margin-top:14px">See your ad account <mark>before</mark> you pay for it.</h1>
+    <p class="lede">Set your budget and your market. The console plans a 30-day campaign in front of you, shows the maths, and sends the plan to us on WhatsApp when you are ready.</p>
+    <div class="doors" role="group" aria-label="What do you want?">
+      <button class="door" id="doorGrow" aria-pressed="true"><b>Grow my business</b><span>We build and run the system for you.</span></button>
+      <button class="door" id="doorLearn" aria-pressed="false"><b>Teach me the skill</b><span>Learn to do it yourself, from practitioners.</span></button>
+    </div>
+  </div>
+
+  <div>
+    <div class="console" id="planner" aria-label="Campaign planner">
+      <div class="console-head"><span class="label">Campaign planner · 30 days</span><span class="pill est">Estimate, not a promise</span></div>
+      <div class="controls">
+        <div><span class="label" id="nicheLabel">Your market</span><div class="chips" id="niches" role="group" aria-labelledby="nicheLabel"></div></div>
+        <div class="row2">
+          <div><label class="label" for="budget">Monthly ad budget</label><div class="budget-val" id="budgetVal"></div>
+            <input type="range" id="budget" min="100000" max="5000000" step="50000" value="300000"></div>
+          <div><span class="label" id="goalLabel">Goal</span><div class="chips" id="goals" role="group" aria-labelledby="goalLabel">
+            <button class="chip" data-goal="sales" aria-pressed="true">Sales</button><button class="chip" data-goal="leads" aria-pressed="false">Leads</button></div>
+            <div class="field" id="aovField" style="margin-top:12px"><label class="label" for="aov">Average order value (₦)</label><input id="aov" type="number" inputmode="numeric" min="500" step="500" value="25000"></div>
+          </div>
+        </div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="chartbox">
+        <div class="legend"><span><i style="background:var(--spend)"></i>Ad spend</span><span><i style="background:var(--profit)"></i><span id="legendOut">Revenue</span></span><span>Shaded band = low to high estimate</span></div>
+        <canvas id="chart" role="img" aria-label="Projected cumulative spend and results over 30 days"></canvas>
+      </div>
+      <details class="assume"><summary>Show the maths (edit the assumptions)</summary>
+        <div class="assume-grid">
+          <div class="field"><label class="label" for="aCpm">CPM (₦ per 1,000 views)</label><input id="aCpm" type="number" min="100" step="50"></div>
+          <div class="field"><label class="label" for="aCtr">Click rate (%)</label><input id="aCtr" type="number" min="0.1" step="0.1"></div>
+          <div class="field"><label class="label" for="aCvr">Conversion rate (%)</label><input id="aCvr" type="number" min="0.1" step="0.1"></div>
+        </div>
+        <p>Views = budget ÷ CPM × 1,000. Clicks = views × click rate. Results = clicks × conversion rate. The low and high figures are 30% either side. These are starting assumptions for planning; your real numbers come from your own account after the first week of data.</p>
+      </details>
+    </div>
+
+    <div class="console" id="school" hidden aria-label="Training tracks">
+      <div class="console-head"><span class="label">Pick a track</span><span class="pill">6 programmes</span></div>
+      <div class="tracks" id="tracks"></div>
+    </div>
+  </div>
+</div></div>
+
+<section class="sec" id="build"><div class="wrap">
+  <p class="label">Campaign structure</p>
+  <h2 style="margin-top:10px">An ad is the last thing we build.</h2>
+  <p class="intro">Traffic sent to a weak page burns budget. So we own the whole chain, in this order, and each part is live before the next one starts.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Layer</th><th>What you get</th><th>Delivery</th><th>Why it comes here</th></tr></thead>
+    <tbody>
+      <tr><td>Brand</td><td>Logo, colours, type, ad-ready templates</td><td class="mono">5–10 working days</td><td>People buy from names they recognise on the second view.</td></tr>
+      <tr><td>Website</td><td>WordPress or WooCommerce site, mobile first, payment and WhatsApp wired in</td><td class="mono">2–4 weeks</td><td>The page decides whether a click becomes money.</td></tr>
+      <tr><td>Funnel</td><td>Sales page, lead capture, email and WhatsApp follow-up</td><td class="mono">with the site</td><td>Most buyers need more than one touch.</td></tr>
+      <tr><td>Tracking</td><td>Pixel, conversion events, analytics dashboard</td><td class="mono">3–5 working days</td><td>No tracking, no optimisation. You see every number we see.</td></tr>
+      <tr><td>Ads</td><td>Meta, Google and TikTok campaigns, creative, testing, scaling</td><td class="mono">3–5 working days</td><td>Now the budget has somewhere worth sending people.</td></tr>
+    </tbody>
+  </table></div>
+  <a class="more" href="/packages/">See every package and build your plan →</a>
+</div></section>
+
+<section class="sec band" id="days"><div class="wrap">
+  <p class="label">Your first 30 days</p>
+  <h2 style="margin-top:10px">What happens after you say yes.</h2>
+  <ol class="timeline">
+    <li><span class="day">Day 0</span><h3>Strategy call</h3><p>Free, 30 minutes. We look at your offer, your numbers and your market, and tell you what we would and would not do.</p></li>
+    <li><span class="day">Days 1–5</span><h3>Setup</h3><p>Ad accounts structured, tracking installed and tested, first creative produced.</p></li>
+    <li><span class="day">Launch day</span><h3>Go live</h3><p>Campaigns start. Paid ads can bring the first leads the same day.</p></li>
+    <li><span class="day">Day 2–3</span><h3>First real data</h3><p>Within 24–48 hours there is enough to read. We cut what is weak and feed what works.</p></li>
+    <li><span class="day">Day 30</span><h3>Report and next step</h3><p>Performance report and a call. You decide whether to scale, hold or stop.</p></li>
+  </ol>
+</div></section>
+
+<section class="sec" id="proof"><div class="wrap">
+  <p class="label">Proof</p>
+  <h2 style="margin-top:10px">Real accounts. Real numbers.</h2>
+  <p class="intro">Figures straight from Meta Ads Manager: what was spent and what came back.</p>
+  <a class="more" href="/portfolio/" style="margin-top:14px">How we report results →</a>
+  <div class="proof"><div class="case"><p class="label">Games tables · 4 campaigns</p><p class="big mono">383</p><p class="what">buyer conversations on WhatsApp</p>
+    <dl><dt>Cost</dt><dd class="mono">₦486 per conversation</dd><dt>Spend</dt><dd class="mono">₦186,146</dd><dt>Views</dt><dd class="mono">148,931</dd><dt>How</dt><dd>Snooker and table tennis tables. Sales campaign, orders taken on WhatsApp</dd></dl></div><div class="case"><p class="label">4-in-1 product, e-commerce brand · 5 campaigns</p><p class="big mono">479</p><p class="what">buyer conversations on WhatsApp</p>
+    <dl><dt>Cost</dt><dd class="mono">₦395 per conversation</dd><dt>Spend</dt><dd class="mono">₦188,971</dd><dt>Views</dt><dd class="mono">139,268</dd><dt>How</dt><dd>Sales campaign, orders taken on WhatsApp</dd></dl></div><div class="case"><p class="label">Home treadmills · 9 campaigns</p><p class="big mono">311</p><p class="what">buyer conversations on WhatsApp</p>
+    <dl><dt>Cost</dt><dd class="mono">₦878 per conversation</dd><dt>Spend</dt><dd class="mono">₦273,135</dd><dt>Views</dt><dd class="mono">150,366</dd><dt>How</dt><dd>Sales campaign, orders taken on WhatsApp</dd></dl></div></div>
+  <p class="src">Source: Meta Ads Manager, lifetime totals read on 12 November 2026. Client names withheld.</p>
+</div></section>
+
+<section class="sec" id="founder"><div class="wrap">
+  <div class="founder">
+    <blockquote>We don't run ads. We build <span>revenue systems.</span></blockquote>
+    <div class="who">
+      <p class="label">Who runs your account</p>
+      <h3 style="font-size:30px">Ademola Adeniran</h3>
+      <p>Founder, performance marketer and media buyer. Six years running Meta and Google campaigns, building each one backwards from the revenue target. You talk to the person doing the work.</p>
+      <div class="niches"><span>Health &amp; beauty</span><span>Gadgets &amp; tech</span><span>Security</span><span>FMCG</span><span>Real estate</span><span>Education</span><span>Food</span><span>Affiliate</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="training"><div class="wrap">
+  <p class="label">Training</p>
+  <h2 style="margin-top:10px">Or learn to run it yourself.</h2>
+  <p class="intro">Six programmes taught by people who use these skills on client accounts every day. Video lessons, lifetime access, a certificate when you finish.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Programme</th><th>You will be able to</th><th>Level</th><th>Lessons</th><th>Length</th></tr></thead>
+    <tbody id="courseRows"></tbody>
+  </table></div>
+  <a class="more" href="/training/">See every curriculum →</a>
+</div></section>
+
+<section class="sec" id="more"><div class="wrap"><p class="label">Everything else we run</p><h2 style="margin-top:10px">More from Demoski.</h2><div class="offers"><a href="/done-for-you/"><b>Done-For-You Setup →</b><span>Your whole system built in 14 days</span></a><a href="/autobuild-funnel/"><b>AutoBuild →</b><span>Funnel-building course</span></a><a href="/ai-funnel-generator/"><b>AI Funnel Accelerator →</b><span>AI funnels with WhatsApp follow-up</span></a><a href="/affiliate/"><b>Affiliates →</b><span>Earn 20% per referral</span></a><a href="https://demoskidigital.com/template-bundle-customizer/"><b>Template Bundle →</b><span>54 ready-made business templates</span></a><a href="https://demoskidigital.com/course-os/"><b>Course OS →</b><span>Course platform for creators</span></a></div></div></section>
+
+<section class="sec" id="faq"><div class="wrap">
+  <p class="label">Before you ask</p>
+  <h2 style="margin-top:10px">Straight answers.</h2>
+  <div class="faq">
+    <details open><summary>What is the smallest budget you work with?</summary><p>₦100,000 a month in ad spend, or the equivalent in dollars. Below that there is not enough data to optimise.</p></details>
+    <details><summary>Is ad spend part of your fee?</summary><p>No. You pay Meta, Google or TikTok directly for ads. Our fee covers strategy, setup, creative, management and reporting.</p></details>
+    <details><summary>Can I take one service only?</summary><p>Yes. Take one layer or the whole system. Larger projects can be paid 50% up front and 50% on delivery.</p></details>
+    <details><summary>Do you work outside Nigeria?</summary><p>Yes. We work remotely with clients across Africa, the UK, the US and Canada.</p></details>
+    <details><summary>How fast do you reply?</summary><p>Within one hour during business hours, on WhatsApp or email.</p></details>
+  </div>
+</div></section>
+
+<section class="sec" id="send"><div class="wrap">
+  <p class="label">Start</p>
+  <h2 style="margin-top:10px">Your plan is already written.</h2>
+  <div class="handoff">
+    <div>
+      <p class="intro" style="margin-top:0">This is the message the console built from your choices. Change anything above and it updates. Send it and the conversation starts with your numbers, not with "hello".</p>
+      <div class="btnrow"><a class="btn" id="waBtn" target="_blank" rel="noopener">Send on WhatsApp</a><button class="btn ghost" id="copyBtn">Copy message</button></div>
+      <div class="contact"><span>WhatsApp / call: +234 706 615 3757</span><span>Email: hello@demoskidigital.com</span></div>
+    </div>
+    <div class="msg" id="msg" tabindex="0"></div>
+  </div>
+</div></section>
+<section class="sec" id="business"><div class="wrap">
+  <div class="split">
+    <div><p class="label">About the Business</p><p class="legal-about">Demoski Digital is the operating brand of Demoski Designs and Geospatial Consult, a registered Nigerian business providing professional geospatial, surveying, mapping, digital design and related consultancy services.</p></div>
+    <div><p class="label">Business Contact Information</p><dl class="legal-dl"><dt>Legal Business Name</dt><dd>Demoski Designs and Geospatial Consult</dd><dt>Trading/Brand Name</dt><dd>Demoski Digital</dd><dt>Phone</dt><dd><a href="tel:+2347066153757">+2347066153757</a></dd><dt>Email</dt><dd><a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a></dd><dt>Website</dt><dd>demoskidigital.com</dd></dl></div>
+  </div>
+</div></section>
+</main>
+<footer><div class="wrap footgrid">
+  <div><p class="label">Agency</p><a href="/">Campaign planner</a><a href="/packages/">Packages</a><a href="/done-for-you/">Done-For-You Setup</a><a href="/portfolio/">Proof</a><a href="/about/">About</a><a href="/contact/">Contact</a></div><div><p class="label">Learn</p><a href="/training/">Training</a><a href="/autobuild-funnel/">AutoBuild</a><a href="/ai-funnel-generator/">AI Funnel Accelerator</a></div><div><p class="label">Products</p><a href="https://demoskidigital.com/template-bundle-customizer/">Template Bundle</a><a href="https://demoskidigital.com/course-os/">Course OS</a><a href="/affiliate/">Affiliates</a></div>
+  <div><p class="label">Contact</p><span>WhatsApp +234 706 615 3757</span><a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a><span>Nigeria and worldwide</span></div>
+</div>
+<div class="wrap legal-foot">
+  <div><p class="label">About the Business</p><p>Demoski Digital is the operating brand of Demoski Designs and Geospatial Consult, a registered Nigerian business providing professional geospatial, surveying, mapping, digital design and related consultancy services.</p></div>
+  <div><p class="label">Business Contact Information</p><p>Legal Business Name: Demoski Designs and Geospatial Consult<br>Trading/Brand Name: Demoski Digital<br>Phone: +2347066153757</p></div>
+</div>
+<div class="wrap" style="border-top:0;padding-top:0"><span>© 2026 Demoski Designs and Geospatial Consult, trading as Demoski Digital</span>
+</div></footer>
+<div class="bar" role="region" aria-label="Contact"><span class="sum" id="barSum"></span><a class="btn" id="barBtn" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
+<script>
+(function(){
+  var WA='https://wa.me/2347066153757?text=';
+  // Starting assumptions per market. Replace with Demoski's real account averages before launch.
+  var NICHES=[
+    {id:'fashion',name:'Fashion',cpm:1500,ctr:1.8,lead:8,sale:1.8,aov:25000},
+    {id:'beauty',name:'Beauty & skincare',cpm:1400,ctr:2.0,lead:9,sale:2.2,aov:18000},
+    {id:'gadgets',name:'Gadgets & tech',cpm:1800,ctr:1.5,lead:7,sale:1.2,aov:85000},
+    {id:'realestate',name:'Real estate',cpm:2600,ctr:1.2,lead:6,sale:0.3,aov:2500000},
+    {id:'food',name:'Food & restaurants',cpm:1200,ctr:2.2,lead:10,sale:2.5,aov:9000},
+    {id:'education',name:'Courses & education',cpm:1700,ctr:1.6,lead:9,sale:1.5,aov:45000},
+    {id:'other',name:'Something else',cpm:1800,ctr:1.6,lead:8,sale:1.5,aov:30000}
+  ];
+  var COURSES=[
+    {n:'Graphic Design & Branding',d:'Design logos, brand kits and social graphics clients pay for',l:'Beginner',k:12,h:'5 hrs'},
+    {n:'WordPress Website Design',d:'Build and launch a business website without code',l:'Beginner',k:10,h:'3.5 hrs'},
+    {n:'Funnels & Automation',d:'Build sales funnels with email and CRM follow-up',l:'Intermediate',k:14,h:'5 hrs'},
+    {n:'Paid Advertising Mastery',d:'Run profitable Meta, Google and TikTok campaigns',l:'Intermediate',k:16,h:'6 hrs'},
+    {n:'E-commerce & Affiliate Marketing',d:'Set up and scale a store or affiliate business',l:'Intermediate',k:13,h:'5 hrs'},
+    {n:'Digital Marketing Strategy',d:'Combine ads, SEO, funnels and copy into one system',l:'Advanced',k:20,h:'8 hrs'}
+  ];
+  var S={door:'grow',niche:NICHES[0],budget:300000,goal:'sales',aov:25000,cpm:1500,ctr:1.8,cvr:1.8,course:COURSES[3]};
+  var $=function(id){return document.getElementById(id)};
+  function naira(n){
+    if(n>=1e9)return '₦'+(n/1e9).toFixed(2).replace(/\.?0+$/,'')+'B';
+    if(n>=1e6)return '₦'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';
+    return '₦'+Math.round(n).toLocaleString('en-NG');
+  }
+  function num(n){return Math.round(n).toLocaleString('en-NG')}
+
+  function plan(){
+    var views=S.budget/S.cpm*1000, clicks=views*S.ctr/100, res=clicks*S.cvr/100;
+    var lo=res*0.7, hi=res*1.3;
+    return {views:views,clicks:clicks,res:res,lo:lo,hi:hi,
+      revLo:lo*S.aov,revHi:hi*S.aov,cost:res>0?S.budget/res:0,
+      roasLo:lo*S.aov/S.budget,roasHi:hi*S.aov/S.budget};
+  }
+
+  function setNiche(n){
+    S.niche=n;S.cpm=n.cpm;S.ctr=n.ctr;S.cvr=S.goal==='sales'?n.sale:n.lead;S.aov=n.aov;
+    $('aCpm').value=S.cpm;$('aCtr').value=S.ctr;$('aCvr').value=S.cvr;$('aov').value=S.aov;
+  }
+
+  function buildChips(){
+    var box=$('niches');
+    NICHES.forEach(function(n){
+      var b=document.createElement('button');b.className='chip';b.textContent=n.name;b.setAttribute('aria-pressed',n===S.niche);
+      b.onclick=function(){setNiche(n);render()};b._n=n;box.appendChild(b);
+    });
+    var tr=$('tracks'),rows=$('courseRows');
+    COURSES.forEach(function(c){
+      var b=document.createElement('button');b.className='track';b.setAttribute('aria-pressed',c===S.course);
+      b.innerHTML='<b></b><small></small><em></em>';
+      b.children[0].textContent=c.n;b.children[1].textContent=c.d;b.children[2].textContent=c.k+' lessons · '+c.h;
+      b.onclick=function(){S.course=c;render()};b._c=c;tr.appendChild(b);
+      var r=document.createElement('tr');
+      [c.n,c.d,c.l,c.k,c.h].forEach(function(v,i){var td=document.createElement('td');td.textContent=v;if(i>1)td.className='mono';r.appendChild(td)});
+      rows.appendChild(r);
+    });
+  }
+
+  function message(p){
+    if(S.door==='learn')
+      return 'Hi Demoski. I want to learn, not hire.\n\nProgramme: '+S.course.n+' ('+S.course.l+', '+S.course.k+' lessons)\n\nPlease send me the price, the start date and how to enrol.';
+    var out=S.goal==='sales'
+      ? 'Planner estimate: '+num(p.lo)+'–'+num(p.hi)+' sales, '+naira(p.revLo)+'–'+naira(p.revHi)+' revenue.'
+      : 'Planner estimate: '+num(p.lo)+'–'+num(p.hi)+' leads at about '+naira(p.cost)+' each.';
+    return 'Hi Demoski. I used the planner on your site.\n\nMarket: '+S.niche.name+'\nAd budget: '+naira(S.budget)+' a month\nGoal: '+(S.goal==='sales'?'Sales (average order '+naira(S.aov)+')':'Leads')+'\n'+out+'\n\nCan we book the free strategy call?';
+  }
+
+  function render(){
+    var p=plan(),grow=S.door==='grow';
+    $('doorGrow').setAttribute('aria-pressed',grow);$('doorLearn').setAttribute('aria-pressed',!grow);
+    $('planner').hidden=!grow;$('school').hidden=grow;
+    $('acctName').textContent=grow?S.niche.name+' brand':'Student';
+    [].forEach.call($('niches').children,function(b){b.setAttribute('aria-pressed',b._n===S.niche)});
+    [].forEach.call($('goals').children,function(b){b.setAttribute('aria-pressed',b.dataset.goal===S.goal)});
+    [].forEach.call($('tracks').children,function(b){b.setAttribute('aria-pressed',b._c===S.course)});
+    $('budgetVal').textContent=naira(S.budget);
+    $('aovField').hidden=S.goal!=='sales';
+    $('legendOut').textContent=S.goal==='sales'?'Revenue':'Leads';
+    var k=S.goal==='sales'
+      ? [['People reached',num(p.views)],['Clicks to your page',num(p.clicks)],['Sales',num(p.lo)+'–'+num(p.hi)],['Cost per sale',naira(p.cost)],
+         ['Ad spend',naira(S.budget)],['Revenue',naira(p.revLo)+'–'+naira(p.revHi),1],['Return on ad spend',p.roasLo.toFixed(1)+'×–'+p.roasHi.toFixed(1)+'×',1],['Period','30 days']]
+      : [['People reached',num(p.views)],['Clicks to your page',num(p.clicks)],['Leads',num(p.lo)+'–'+num(p.hi),1],['Cost per lead',naira(p.cost),1]];
+    var box=$('kpis');box.textContent='';
+    k.forEach(function(x){var d=document.createElement('div');d.className='kpi'+(x[2]?' win':'');
+      var s=document.createElement('span');s.className='label';s.textContent=x[0];var b=document.createElement('b');b.textContent=x[1];d.appendChild(s);d.appendChild(b);box.appendChild(d)});
+    var m=message(p);$('msg').textContent=m;
+    var url=WA+encodeURIComponent(m);$('waBtn').href=url;$('barBtn').href=url;
+    var sum=$('barSum');sum.textContent='';
+    var b=document.createElement('b');
+    if(grow){b.textContent=naira(S.budget)+'/mo';sum.appendChild(b);
+      sum.appendChild(document.createTextNode(' → '+(S.goal==='sales'?naira(p.revLo)+'–'+naira(p.revHi)+' est. revenue':num(p.lo)+'–'+num(p.hi)+' est. leads')));
+      $('barBtn').textContent='Send my plan';}
+    else{b.textContent=S.course.n;sum.appendChild(b);$('barBtn').textContent='Ask about this';}
+    draw(p,true);
+  }
+
+  // chart: cumulative spend (straight) vs result (slow start while the campaign learns)
+  var raf=0;
+  function curve(t){return t*t*(3-2*t)*0.55+t*0.45}
+  function draw(p,animate){
+    var c=$('chart');if(!c.getContext)return;
+    var w=c.clientWidth,h=c.clientHeight;if(!w)return;
+    var dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;
+    var g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
+    var cs=getComputedStyle(document.documentElement),col=function(v){return cs.getPropertyValue(v).trim()};
+    var sales=S.goal==='sales',hiV=sales?p.revHi:p.hi,loV=sales?p.revLo:p.lo,midV=sales?p.res*S.aov:p.res;
+    var maxY=Math.max(sales?S.budget:0,hiV)*1.08||1;
+    var L=58,R=12,T=10,B=26,pw=w-L-R,ph=h-T-B;
+    var X=function(d){return L+pw*d/30},Y=function(v){return T+ph*(1-v/maxY)};
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var start=performance.now();cancelAnimationFrame(raf);
+    function frame(now){
+      var prog=(!animate||reduce)?1:Math.min(1,(now-start)/700),end=30*prog,d;
+      g.clearRect(0,0,w,h);
+      g.font='11px JetBrains Mono, monospace';g.textBaseline='middle';
+      for(var i=0;i<=4;i++){var v=maxY/1.08*i/4,y=Y(v);
+        g.strokeStyle=col('--line');g.lineWidth=1;g.beginPath();g.moveTo(L,y);g.lineTo(w-R,y);g.stroke();
+        g.fillStyle=col('--muted');g.textAlign='right';g.fillText(sales?naira(v):num(v),L-8,y);}
+      g.textAlign='center';g.textBaseline='alphabetic';
+      [1,7,14,21,30].forEach(function(dd){g.fillText('Day '+dd,Math.min(Math.max(X(dd),L+18),w-R-20),h-6)});
+      // band
+      g.beginPath();for(d=0;d<=end;d+=.5)g.lineTo(X(d),Y(hiV*curve(d/30)));
+      for(d=end;d>=0;d-=.5)g.lineTo(X(d),Y(loV*curve(d/30)));
+      g.closePath();g.globalAlpha=.16;g.fillStyle=col('--profit');g.fill();g.globalAlpha=1;
+      // result line
+      g.beginPath();for(d=0;d<=end;d+=.5)g.lineTo(X(d),Y(midV*curve(d/30)));
+      g.strokeStyle=col('--profit');g.lineWidth=3;g.stroke();
+      g.beginPath();g.arc(X(end),Y(midV*curve(end/30)),4.5,0,7);g.fillStyle=col('--profit');g.fill();
+      if(sales){g.beginPath();g.moveTo(X(0),Y(0));g.lineTo(X(end),Y(S.budget*end/30));g.strokeStyle=col('--spend');g.lineWidth=3;g.stroke();
+        g.beginPath();g.arc(X(end),Y(S.budget*end/30),4.5,0,7);g.fillStyle=col('--spend');g.fill();}
+      if(prog<1)raf=requestAnimationFrame(frame);
+    }
+    raf=requestAnimationFrame(frame);
+  }
+
+  function numIn(id,key,min){$(id).addEventListener('input',function(){var v=parseFloat(this.value);if(v>=min){S[key]=v;render()}})}
+  buildChips();setNiche(S.niche);
+  $('budget').addEventListener('input',function(){S.budget=+this.value;render()});
+  numIn('aov','aov',1);numIn('aCpm','cpm',1);numIn('aCtr','ctr',0.01);numIn('aCvr','cvr',0.01);
+  [].forEach.call($('goals').children,function(b){b.onclick=function(){S.goal=b.dataset.goal;S.cvr=S.goal==='sales'?S.niche.sale:S.niche.lead;$('aCvr').value=S.cvr;render()}});
+  $('doorGrow').onclick=function(){S.door='grow';render()};
+  $('doorLearn').onclick=function(){S.door='learn';render()};
+  $('copyBtn').onclick=function(){
+    var btn=this,t=$('msg').textContent,done=function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy message'},1600)};
+    var fallback=function(){var r=document.createRange();r.selectNodeContents($('msg'));var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected. Press copy'};
+    try{navigator.clipboard.writeText(t).then(done,fallback)}catch(e){fallback()}
+  };
+  var redraw=function(){draw(plan(),false)};
+  window.addEventListener('resize',redraw);
+  if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+  new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+  render();
+})();
+</script>
+</div>
