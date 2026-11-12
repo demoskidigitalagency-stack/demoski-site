@@ -86,6 +86,12 @@ tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
 .offers a b{font-family:var(--display);font-size:24px;letter-spacing:-.01em}
 .offers a span{color:var(--muted);font-size:15px}
 .offers a:hover b{color:var(--spend)}
+.legal-about{font-size:18px;max-width:60ch;margin-top:12px}
+.legal-dl{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:16px}
+.legal-dl dt{color:var(--muted)}
+.legal-dl dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.legal-foot{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px 32px}
+.legal-foot p{margin-top:6px;max-width:70ch}
 footer .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
 footer a{text-decoration:none}
 footer a:hover{text-decoration:underline}
@@ -134,8 +140,20 @@ OFFERS = [("/done-for-you/", "Done-For-You Setup", "Your whole system built in 1
         ("/affiliate/", "Affiliates", "Earn 20% per referral"),
         (WP + "/template-bundle-customizer/", "Template Bundle", "54 ready-made business templates"),
         (WP + "/course-os/", "Course OS", "Course platform for creators")]
-MORE = [("/about/", "About", "Who runs your account")] + [o for o in OFFERS if o[1] in ("Template Bundle", "Course OS")]
-FOOT = [("Agency", [("/", "Campaign planner"), ("/packages/", "Packages"), ("/done-for-you/", "Done-For-You Setup"), ("/portfolio/", "Proof"), ("/about/", "About")]),
+MORE = [("/about/", "About", "Who runs your account"), ("/contact/", "Contact Us", "Phone, WhatsApp and email")] + [o for o in OFFERS if o[1] in ("Template Bundle", "Course OS")]
+LEGAL_NAME = "Demoski Designs and Geospatial Consult"
+LEGAL_PHONE = "+2347066153757"
+LEGAL_ABOUT = "Demoski Digital is the operating brand of Demoski Designs and Geospatial Consult, a registered Nigerian business providing professional geospatial, surveying, mapping, digital design and related consultancy services."
+LEGAL_DL = f"""<dl class="legal-dl"><dt>Legal Business Name</dt><dd>{LEGAL_NAME}</dd><dt>Trading/Brand Name</dt><dd>Demoski Digital</dd><dt>Phone</dt><dd><a href="tel:{LEGAL_PHONE}">{LEGAL_PHONE}</a></dd><dt>Email</dt><dd><a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a></dd><dt>Website</dt><dd>demoskidigital.com</dd></dl>"""
+LEGAL_SECTION = f"""<section class="sec" id="business"><div class="wrap">
+  <div class="split">
+    <div><p class="label">About the Business</p><p class="legal-about">{LEGAL_ABOUT}</p></div>
+    <div><p class="label">Business Contact Information</p>{LEGAL_DL}</div>
+  </div>
+</div></section>"""
+LD = json.dumps({"@context": "https://schema.org", "@type": "Organization", "name": "Demoski Digital", "legalName": LEGAL_NAME,
+                 "url": SITE, "telephone": LEGAL_PHONE, "email": "hello@demoskidigital.com", "address": {"@type": "PostalAddress", "addressCountry": "NG"}})
+FOOT = [("Agency", [("/", "Campaign planner"), ("/packages/", "Packages"), ("/done-for-you/", "Done-For-You Setup"), ("/portfolio/", "Proof"), ("/about/", "About"), ("/contact/", "Contact")]),
         ("Learn", [("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel Accelerator")]),
         ("Products", [(WP + "/template-bundle-customizer/", "Template Bundle"), (WP + "/course-os/", "Course OS"), ("/affiliate/", "Affiliates")])]
 FAVICON = "data:image/svg+xml," + "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2310131C'/%3E%3Ctext x='5' y='24' font-family='Arial' font-weight='900' font-size='22' fill='%23ECEEF2'%3ED%3C/text%3E%3Ccircle cx='25' cy='22' r='3' fill='%23F0431A'/%3E%3C/svg%3E"
@@ -161,6 +179,7 @@ def page(path, title, desc, acct, main, body_attrs="", script="site.js", noindex
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{SITE}{path}">
+<script type="application/ld+json">{LD}</script>
 <link rel="icon" href="{FAVICON}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -178,7 +197,11 @@ def page(path, title, desc, acct, main, body_attrs="", script="site.js", noindex
   {foot}
   <div><p class="label">Contact</p><span>WhatsApp +234 706 615 3757</span><a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a><span>Nigeria and worldwide</span></div>
 </div>
-<div class="wrap" style="border-top:0;padding-top:0"><span>© 2026 Demoski Digital Agency</span>
+<div class="wrap legal-foot">
+  <div><p class="label">About the Business</p><p>{LEGAL_ABOUT}</p></div>
+  <div><p class="label">Business Contact Information</p><p>Legal Business Name: {LEGAL_NAME}<br>Trading/Brand Name: Demoski Digital<br>Phone: {LEGAL_PHONE}</p></div>
+</div>
+<div class="wrap" style="border-top:0;padding-top:0"><span>© 2026 {LEGAL_NAME}, trading as Demoski Digital</span>
 </div></footer>
 <div class="bar" role="region" aria-label="Contact"><span class="sum" id="barSum"></span><a class="btn" id="barBtn" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
 <script src="/assets/{script}" defer></script>
@@ -326,7 +349,7 @@ portfolio = f"""<main>
 </main>"""
 
 # ---------------------------------------------------------------- ABOUT
-about = """<main>
+about = f"""<main>
 <div class="phero"><div class="wrap">
   <p class="label">About</p>
   <h1>We don't run ads. We build <mark>revenue systems.</mark></h1>
@@ -364,6 +387,7 @@ about = """<main>
   <p class="label" style="margin-top:36px">Tools we use every day</p>
   <div class="tools"><span>Meta Ads Manager</span><span>Google Ads</span><span>TikTok Ads</span><span>Meta Pixel &amp; Events Manager</span><span>Google Analytics</span><span>Google Tag Manager</span><span>Hotjar</span><span>WordPress</span><span>Elementor</span><span>Thrive Architect</span><span>Mailchimp</span></div>
 </div></section>
+{LEGAL_SECTION}
 <section class="sec"><div class="wrap">
   <h2>Want to see what your budget could do?</h2>
   <div class="btnrow cta-line"><a class="btn" href="/">Open the planner</a><a class="btn ghost" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
@@ -373,6 +397,7 @@ about = """<main>
 # ---------------------------------------------------------------- HOME
 home = home_main.replace('href="#build"', 'href="#build"')
 offers = "".join('<a href="%s"><b>%s →</b><span>%s</span></a>' % (h, t, d) for h, t, d in OFFERS)
+home = home.replace('</main>', LEGAL_SECTION + '\n</main>')
 home = home.replace('<section class="sec" id="faq">', '<section class="sec" id="more"><div class="wrap"><p class="label">Everything else we run</p><h2 style="margin-top:10px">More from Demoski.</h2><div class="offers">' + offers + '</div></div></section>\n\n<section class="sec" id="faq">')
 home = home.replace(
     '<tbody id="courseRows"></tbody>\n  </table></div>',
@@ -603,7 +628,20 @@ page("/affiliate/", "Affiliate Programme | Demoski Digital Agency",
      "Refer business owners to Demoski Digital and earn 20% commission on their first package or training enrolment.",
      "Affiliates", affiliate, attrs("Hi Demoski. I want to apply to your affiliate programme.", "Earn 20% per referral"))
 
-urls = ["/", "/packages/", "/done-for-you/", "/training/", "/autobuild-funnel/", "/ai-funnel-generator/", "/affiliate/", "/about/"]
+contact = f"""<main>
+<div class="phero"><div class="wrap">
+  <p class="label">Contact Us</p>
+  <h1>Talk to <mark>Demoski Digital.</mark></h1>
+  <p class="lede">WhatsApp is fastest. We reply within one hour during business hours.</p>
+  <div class="btnrow"><a class="btn" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a><a class="btn ghost" href="tel:{LEGAL_PHONE}">Call {LEGAL_PHONE}</a><a class="btn ghost" href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a></div>
+</div></div>
+{LEGAL_SECTION}
+</main>"""
+page("/contact/", "Contact Us | Demoski Digital (Demoski Designs and Geospatial Consult)",
+     "Contact Demoski Digital, the operating brand of Demoski Designs and Geospatial Consult. Phone and WhatsApp +2347066153757.",
+     "Contact", contact, attrs("Hi Demoski. I would like to talk about my business.", "We reply within one hour"))
+
+urls = ["/contact/", "/", "/packages/", "/done-for-you/", "/training/", "/autobuild-funnel/", "/ai-funnel-generator/", "/affiliate/", "/about/"]
 open(os.path.join(DIST, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
 open(os.path.join(DIST, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
 json.dump({
