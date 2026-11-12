@@ -21,7 +21,10 @@
     btn.addEventListener('click',function(){
       var n=btn.dataset.name,on=btn.getAttribute('aria-pressed')!=='true';
       if(single){picks=[];[].forEach.call(document.querySelectorAll('.pick'),function(o){o.setAttribute('aria-pressed','false');o.textContent=o.dataset.off})}
+      var max=+(b.dataset.max||0);
+      if(on&&max&&picks.length>=max){var note=document.getElementById('maxNote');if(note)note.hidden=false;return}
       if(on)picks.push(n);else picks=picks.filter(function(p){return p!==n});
+      var mn=document.getElementById('maxNote');if(mn)mn.hidden=true;
       btn.setAttribute('aria-pressed',on);btn.textContent=on?btn.dataset.on:btn.dataset.off;
       upd();
     });

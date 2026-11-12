@@ -21,6 +21,11 @@
       "source": "/blog/",
       "destination": "/",
       "permanent": false
+    },
+    {
+      "source": "/social-media-management-training/",
+      "destination": "/training/",
+      "permanent": false
     }
   ],
   "headers": [

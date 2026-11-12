@@ -61,6 +61,10 @@ td .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spaci
 .case dd{margin:0}
 .src{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px}
 @media(min-width:800px){.proof.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.price{font-size:clamp(30px,4vw,52px);font-weight:700;margin-top:24px}
+.price span{display:block;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.04em;margin-top:4px}
+tr.total td{border-top:2px solid var(--ink);font-weight:600}
+tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
 footer .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
 footer a{text-decoration:none}
 footer a:hover{text-decoration:underline}
@@ -89,7 +93,10 @@ SITE_JS = r"""
     btn.addEventListener('click',function(){
       var n=btn.dataset.name,on=btn.getAttribute('aria-pressed')!=='true';
       if(single){picks=[];[].forEach.call(document.querySelectorAll('.pick'),function(o){o.setAttribute('aria-pressed','false');o.textContent=o.dataset.off})}
+      var max=+(b.dataset.max||0);
+      if(on&&max&&picks.length>=max){var note=document.getElementById('maxNote');if(note)note.hidden=false;return}
       if(on)picks.push(n);else picks=picks.filter(function(p){return p!==n});
+      var mn=document.getElementById('maxNote');if(mn)mn.hidden=true;
       btn.setAttribute('aria-pressed',on);btn.textContent=on?btn.dataset.on:btn.dataset.off;
       upd();
     });
@@ -146,9 +153,9 @@ def page(path, title, desc, acct, main, body_attrs="", script="site.js", noindex
     os.makedirs(os.path.dirname(out), exist_ok=True)
     open(out, "w", encoding="utf-8").write(doc)
 
-def attrs(msg, bar, pickmsg="", pickend="", barcta="Send my plan", single=False):
-    return 'data-msg="%s" data-bar="%s" data-pickmsg="%s" data-pickend="%s" data-barcta="%s"%s' % (
-        e(msg), e(bar), e(pickmsg), e(pickend), e(barcta), ' data-single="1"' if single else "")
+def attrs(msg, bar, pickmsg="", pickend="", barcta="Send my plan", single=False, maxn=0):
+    return 'data-msg="%s" data-bar="%s" data-pickmsg="%s" data-pickend="%s" data-barcta="%s"%s%s' % (
+        e(msg), e(bar), e(pickmsg), e(pickend), e(barcta), ' data-single="1"' if single else "", ' data-max="%d"' % maxn if maxn else "")
 
 # ---------------------------------------------------------------- PACKAGES
 GROUPS = [
@@ -192,6 +199,7 @@ packages = f"""<main>
 </div></div>
 <section class="sec"><div class="wrap" style="padding-top:8px">
   {g_html}
+  <div class="notes" style="margin-bottom:-20px"><p class="label">Want all of it at once?</p><p>The Done-For-You setup builds your website, tracking, email automation and ads in 14 days for one price. <a href="/done-for-you/"><strong>See the Done-For-You setup →</strong></a></p></div>
   <div class="notes"><p class="label">Good to know</p><ul>
     <li>Every package is quoted to your scope after a free 30-minute strategy call. You get a written quote before any work starts.</li>
     <li>Ad spend is separate. You pay Meta, Google or TikTok directly. We recommend at least ₦100,000 a month.</li>
@@ -334,6 +342,70 @@ home = home.replace('Real accounts. Unedited screenshots.', 'Real accounts. Real
 home = home.replace(
     '<div class="proof">', '<a class="more" href="/portfolio/" style="margin-top:14px">How we report results →</a>\n  <div class="proof">')
 
+# ---------------------------------------------------------------- DONE FOR YOU
+DFY_ITEMS = [
+ ("Website", "Complete WordPress site built in Elementor, with the copy written for you", "₦1,500,000"),
+ ("Tracking", "Google Tag Manager and Google Analytics, installed and tested", "₦750,000"),
+ ("Email automation", "Nurture, abandoned cart and buyer follow-up sequences, copy included", "₦1,500,000"),
+ ("Paid ads", "Campaigns set up on up to 3 platforms of your choice", "₦2,400,000"),
+]
+DFY_FAQ = [
+ ("How long does it take?", "Typically 14 days from the day we receive your brief."),
+ ("How much of my time do you need?", "One brief at the start. After that we only come back to you if something needs clarifying."),
+ ("Do I need hosting or an existing website?", "No. Neither is required."),
+ ("Can I use my existing ad accounts and tools?", "Yes. We build inside what you already have where it makes sense."),
+ ("Which ad platforms do you support?", "Meta, Google, TikTok, Microsoft and LinkedIn, among others. You choose up to three."),
+ ("Who owns what you build?", "You do. The site, the accounts, the automations and all access are yours."),
+ ("Is the copywriting included?", "Yes, for the website and the email sequences."),
+ ("Can I edit things after launch?", "Yes. You get instructions for managing everything yourself."),
+ ("What support do I get after handover?", "We answer questions and make reasonable adjustments."),
+ ("Are there extra costs?", "Nothing beyond the quoted price. Your ad spend is separate and goes to the platforms."),
+ ("What about revisions and refunds?", "Reasonable revisions are included. Refunds are available only within 24 hours of purchase and before work begins; after that, sales are final. The Terms and Conditions govern the details."),
+]
+PLATFORMS = ["Meta (Facebook and Instagram)", "Google", "TikTok", "Microsoft", "LinkedIn"]
+dfy_rows = "".join('<tr><td>%s</td><td>%s</td><td class="mono">%s</td></tr>' % (e(a), e(b), e(c)) for a, b, c in DFY_ITEMS)
+dfy_faq = "".join('<details%s><summary>%s</summary><p>%s</p></details>' % (" open" if i == 0 else "", e(q), e(a)) for i, (q, a) in enumerate(DFY_FAQ))
+dfy_picks = "".join('<button class="pick" aria-pressed="false" data-name="%s" data-on="%s ✓" data-off="%s">%s</button>' % (e(p), e(p), e(p), e(p)) for p in PLATFORMS)
+dfy = f"""<main>
+<div class="phero"><div class="wrap">
+  <p class="label">Done-for-you setup</p>
+  <h1>Your whole marketing system, built in <mark>14 days.</mark></h1>
+  <p class="lede">Website, tracking, email automation and ad campaigns. You send one brief. We build it, test it and hand you the keys.</p>
+  <p class="price mono">₦2,400,000 <span>one payment · everything below</span></p>
+</div></div>
+<section class="sec"><div class="wrap">
+  <p class="label">What gets built</p>
+  <h2 style="margin-top:10px">Four layers, one invoice.</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Layer</th><th>What you get</th><th>Listed separately</th></tr></thead>
+    <tbody>{dfy_rows}
+    <tr class="total"><td>All four</td><td>Delivered in 14 days with handover training and full ownership</td><td class="mono"><s>₦6,150,000</s> ₦2,400,000</td></tr></tbody>
+  </table></div>
+</div></section>
+<section class="sec band"><div class="wrap">
+  <p class="label">The 14 days</p>
+  <h2 style="margin-top:10px">One brief. Very few calls.</h2>
+  <ol class="timeline" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+    <li><span class="day">Day 0</span><h3>You send the brief</h3><p>A short questionnaire about your business and goals.</p></li>
+    <li><span class="day">Day 1</span><h3>We confirm</h3><p>We review it and follow up only if something needs clarifying.</p></li>
+    <li><span class="day">Days 2–14</span><h3>We build</h3><p>Site, tracking, email and campaigns are built and tested.</p></li>
+    <li><span class="day">Day 14</span><h3>You take over</h3><p>Handover with instructions so you can run it yourself.</p></li>
+  </ol>
+</div></section>
+<section class="sec" id="brief"><div class="wrap">
+  <p class="label">Start your brief</p>
+  <h2 style="margin-top:10px">Pick your ad platforms.</h2>
+  <p class="intro">Choose up to three. The bar at the bottom sends your choices to us on WhatsApp and we reply with the questionnaire.</p>
+  <div class="btnrow">{dfy_picks}</div>
+  <p class="src" id="maxNote" hidden>Three is the limit. Remove one to add another.</p>
+</div></section>
+<section class="sec"><div class="wrap">
+  <p class="label">Before you ask</p>
+  <h2 style="margin-top:10px">Straight answers.</h2>
+  <div class="faq">{dfy_faq}</div>
+</div></section>
+</main>"""
+
 # ---------------------------------------------------------------- WRITE
 if os.path.exists(DIST): shutil.rmtree(DIST)
 os.makedirs(os.path.join(DIST, "assets"))
@@ -363,12 +435,19 @@ page("/about/", "About | Demoski Digital Agency",
      "About", about,
      attrs("Hi Demoski. I read about how you work and would like to book the free strategy call.", "Free 30-minute strategy call"))
 
-urls = ["/", "/packages/", "/training/", "/about/"]
+page("/done-for-you/", "Done-For-You Marketing Setup | Demoski Digital Agency",
+     "Website, tracking, email automation and ad campaigns on up to three platforms, built and handed over in 14 days for one price.",
+     "Done-for-you setup", dfy,
+     attrs("Hi Demoski. I want the Done-For-You marketing setup (₦2,400,000). Please send me the brief questionnaire.", "₦2,400,000 · built in 14 days",
+           "Hi Demoski. I want the Done-For-You marketing setup (₦2,400,000). Ad platforms I want:", "Please send me the brief questionnaire.", "Send my brief", maxn=3))
+
+urls = ["/", "/packages/", "/done-for-you/", "/training/", "/about/"]
 open(os.path.join(DIST, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
 open(os.path.join(DIST, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
 json.dump({
   "cleanUrls": True, "trailingSlash": True,
-  "redirects": [{"source": s, "destination": "/", "permanent": False} for s in ["/sample-page/", "/elementor-173/", "/fresh-page/", "/blog/"]],
+  "redirects": [{"source": s, "destination": "/", "permanent": False} for s in ["/sample-page/", "/elementor-173/", "/fresh-page/", "/blog/"]]
+      + [{"source": "/social-media-management-training/", "destination": "/training/", "permanent": False}],
   # Remove this header block on launch day. It keeps the preview out of Google.
   "headers": [{"source": "/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}]}]
 }, open(os.path.join(DIST, "vercel.json"), "w"), indent=2)
