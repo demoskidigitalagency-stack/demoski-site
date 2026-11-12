@@ -207,6 +207,25 @@ td .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spaci
 .price span{display:block;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.04em;margin-top:4px}
 tr.total td{border-top:2px solid var(--ink);font-weight:600}
 tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
+.navmore{position:relative}
+.navmore summary{cursor:pointer;color:var(--band-muted);list-style:none}
+.navmore summary::-webkit-details-marker{display:none}
+.navmore summary::after{content:" ▾"}
+.navmore summary:hover,.navmore[open] summary,.navmore summary.on{color:var(--band-ink)}
+.navmenu{position:absolute;right:0;top:calc(100% + 12px);z-index:20;background:var(--band);border:1px solid var(--band-line);border-top:3px solid var(--spend);min-width:270px;max-width:calc(100vw - 32px);display:grid;padding:6px 0}
+.top nav .navmenu a{padding:9px 16px;color:var(--band-ink);display:grid;gap:1px;border:0}
+.top nav .navmenu a:hover,.top nav .navmenu a[aria-current="page"]{background:var(--band-line)}
+.navmenu small{font-family:var(--mono);font-size:11px;color:var(--band-muted)}
+@media(max-width:700px){.navmore{position:static}.navmenu{left:16px;right:16px;top:100%;min-width:0}}
+.footgrid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px 32px}
+.footgrid>div{display:grid;gap:6px;align-content:start;font-size:14px}
+.footgrid .label{margin-bottom:4px}
+.offers{display:grid;gap:0;margin-top:28px;border-top:2px solid var(--ink)}
+@media(min-width:760px){.offers{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.offers a{display:grid;gap:4px;padding:18px 18px 20px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.offers a b{font-family:var(--display);font-size:24px;letter-spacing:-.01em}
+.offers a span{color:var(--muted);font-size:15px}
+.offers a:hover b{color:var(--spend)}
 footer .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
 footer a{text-decoration:none}
 footer a:hover{text-decoration:underline}

@@ -65,6 +65,25 @@ td .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spaci
 .price span{display:block;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.04em;margin-top:4px}
 tr.total td{border-top:2px solid var(--ink);font-weight:600}
 tr.total s{color:var(--muted);font-weight:400;margin-right:8px}
+.navmore{position:relative}
+.navmore summary{cursor:pointer;color:var(--band-muted);list-style:none}
+.navmore summary::-webkit-details-marker{display:none}
+.navmore summary::after{content:" ▾"}
+.navmore summary:hover,.navmore[open] summary,.navmore summary.on{color:var(--band-ink)}
+.navmenu{position:absolute;right:0;top:calc(100% + 12px);z-index:20;background:var(--band);border:1px solid var(--band-line);border-top:3px solid var(--spend);min-width:270px;max-width:calc(100vw - 32px);display:grid;padding:6px 0}
+.top nav .navmenu a{padding:9px 16px;color:var(--band-ink);display:grid;gap:1px;border:0}
+.top nav .navmenu a:hover,.top nav .navmenu a[aria-current="page"]{background:var(--band-line)}
+.navmenu small{font-family:var(--mono);font-size:11px;color:var(--band-muted)}
+@media(max-width:700px){.navmore{position:static}.navmenu{left:16px;right:16px;top:100%;min-width:0}}
+.footgrid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px 32px}
+.footgrid>div{display:grid;gap:6px;align-content:start;font-size:14px}
+.footgrid .label{margin-bottom:4px}
+.offers{display:grid;gap:0;margin-top:28px;border-top:2px solid var(--ink)}
+@media(min-width:760px){.offers{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.offers a{display:grid;gap:4px;padding:18px 18px 20px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.offers a b{font-family:var(--display);font-size:24px;letter-spacing:-.01em}
+.offers a span{color:var(--muted);font-size:15px}
+.offers a:hover b{color:var(--spend)}
 footer .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
 footer a{text-decoration:none}
 footer a:hover{text-decoration:underline}
@@ -106,12 +125,26 @@ SITE_JS = r"""
 """
 
 NAV = [("/", "Planner"), ("/packages/", "Packages"), ("/training/", "Training"), ("/portfolio/", "Proof"), ("/about/", "About")]
+WP = "https://demoskidigital.com"  # pages still served by WordPress; change to the subdomain at launch
+MORE = [("/done-for-you/", "Done-For-You Setup", "Your whole system built in 14 days"),
+        ("/autobuild-funnel/", "AutoBuild", "Funnel-building course"),
+        ("/ai-funnel-generator/", "AI Funnel Accelerator", "AI funnels with WhatsApp follow-up"),
+        ("/affiliate/", "Affiliates", "Earn 20% per referral"),
+        (WP + "/template-bundle-customizer/", "Template Bundle", "54 ready-made business templates"),
+        (WP + "/course-os/", "Course OS", "Course platform for creators"),
+        (WP + "/free-resource/", "Free Resources", "Marketing guides")]
+FOOT = [("Agency", [("/", "Campaign planner"), ("/packages/", "Packages"), ("/done-for-you/", "Done-For-You Setup"), ("/portfolio/", "Proof"), ("/about/", "About")]),
+        ("Learn", [("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel Accelerator"), (WP + "/free-resource/", "Free Resources")]),
+        ("Products", [(WP + "/template-bundle-customizer/", "Template Bundle"), (WP + "/course-os/", "Course OS"), ("/affiliate/", "Affiliates")])]
 FAVICON = "data:image/svg+xml," + "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2310131C'/%3E%3Ctext x='5' y='24' font-family='Arial' font-weight='900' font-size='22' fill='%23ECEEF2'%3ED%3C/text%3E%3Ccircle cx='25' cy='22' r='3' fill='%23F0431A'/%3E%3C/svg%3E"
 
 def e(s): return html.escape(s, quote=True)
 
 def page(path, title, desc, acct, main, body_attrs="", script="site.js", noindex=False):
     nav = "".join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == path else "", t) for h, t in NAV)
+    more = "".join('<a href="%s"%s>%s<small>%s</small></a>' % (h, ' aria-current="page"' if h == path else "", t, d) for h, t, d in MORE)
+    nav += '<details class="navmore"><summary%s>More</summary><div class="navmenu">%s</div></details>' % (' class="on"' if any(h == path for h, _, _ in MORE) else "", more)
+    foot = "".join('<div><p class="label">%s</p>%s</div>' % (g, "".join('<a href="%s">%s</a>' % (h, t) for h, t in links)) for g, links in FOOT)
     robots = '<meta name="robots" content="noindex">\n' if noindex else ""
     doc = f"""<!doctype html>
 <html lang="en">
@@ -139,10 +172,11 @@ def page(path, title, desc, acct, main, body_attrs="", script="site.js", noindex
   <nav aria-label="Main">{nav}</nav>
 </div></header>
 {main}
-<footer><div class="wrap">
-  <span>© 2026 Demoski Digital Agency · Nigeria and worldwide</span>
-  <span><a href="/packages/">Packages</a> · <a href="/training/">Training</a> · <a href="/portfolio/">Proof</a> · <a href="/about/">About</a> · <a href="/affiliate/">Affiliates</a></span>
-  <span>WhatsApp +234 706 615 3757 · <a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a></span>
+<footer><div class="wrap footgrid">
+  {foot}
+  <div><p class="label">Contact</p><span>WhatsApp +234 706 615 3757</span><a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a><span>Nigeria and worldwide</span></div>
+</div>
+<div class="wrap" style="border-top:0;padding-top:0"><span>© 2026 Demoski Digital Agency</span>
 </div></footer>
 <div class="bar" role="region" aria-label="Contact"><span class="sum" id="barSum"></span><a class="btn" id="barBtn" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
 <script src="/assets/{script}" defer></script>
@@ -336,6 +370,8 @@ about = """<main>
 
 # ---------------------------------------------------------------- HOME
 home = home_main.replace('href="#build"', 'href="#build"')
+offers = "".join('<a href="%s"><b>%s →</b><span>%s</span></a>' % (h, t, d) for h, t, d in MORE)
+home = home.replace('<section class="sec" id="faq">', '<section class="sec" id="more"><div class="wrap"><p class="label">Everything else we run</p><h2 style="margin-top:10px">More from Demoski.</h2><div class="offers">' + offers + '</div></div></section>\n\n<section class="sec" id="faq">')
 home = home.replace(
     '<tbody id="courseRows"></tbody>\n  </table></div>',
     '<tbody id="courseRows"></tbody>\n  </table></div>\n  <a class="more" href="/training/">See every curriculum →</a>')
