@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Demoski Digital Agency | See your ad account before you pay for it</title>
+<meta name="description" content="Plan a 30-day ad campaign with your own budget, see the maths, and send the plan to Demoski Digital on WhatsApp. Performance marketing, websites, funnels and training from Lagos.">
+<link rel="canonical" href="https://demoskidigital.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Demoski Digital Agency">
+<meta property="og:title" content="Demoski Digital Agency | See your ad account before you pay for it">
+<meta property="og:description" content="Plan a 30-day ad campaign with your own budget, see the maths, and send the plan to Demoski Digital on WhatsApp. Performance marketing, websites, funnels and training from Lagos.">
+<meta property="og:url" content="https://demoskidigital.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2310131C'/%3E%3Ctext x='5' y='24' font-family='Arial' font-weight='900' font-size='22' fill='%23ECEEF2'%3ED%3C/text%3E%3Ccircle cx='25' cy='22' r='3' fill='%23F0431A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body >
+<header class="top"><div class="wrap">
+  <a class="brand" href="/">Demoski<i>.</i></a>
+  <span class="acct"><span class="dot"></span><span>Account preview: <span id="acctName">Your business</span></span></span>
+  <nav aria-label="Main"><a href="/" aria-current="page">Planner</a><a href="/packages/">Packages</a><a href="/training/">Training</a><a href="/portfolio/">Proof</a><a href="/about/">About</a></nav>
+</div></header>
+<main id="top">
+<div class="hero"><div class="wrap">
+  <div>
+    <p class="label">Demoski Digital Agency · Lagos, serving clients worldwide</p>
+    <h1 style="margin-top:14px">See your ad account <mark>before</mark> you pay for it.</h1>
+    <p class="lede">Set your budget and your market. The console plans a 30-day campaign in front of you, shows the maths, and sends the plan to us on WhatsApp when you are ready.</p>
+    <div class="doors" role="group" aria-label="What do you want?">
+      <button class="door" id="doorGrow" aria-pressed="true"><b>Grow my business</b><span>We build and run the system for you.</span></button>
+      <button class="door" id="doorLearn" aria-pressed="false"><b>Teach me the skill</b><span>Learn to do it yourself, from practitioners.</span></button>
+    </div>
+  </div>
+
+  <div>
+    <div class="console" id="planner" aria-label="Campaign planner">
+      <div class="console-head"><span class="label">Campaign planner · 30 days</span><span class="pill est">Estimate, not a promise</span></div>
+      <div class="controls">
+        <div><span class="label" id="nicheLabel">Your market</span><div class="chips" id="niches" role="group" aria-labelledby="nicheLabel"></div></div>
+        <div class="row2">
+          <div><label class="label" for="budget">Monthly ad budget</label><div class="budget-val" id="budgetVal"></div>
+            <input type="range" id="budget" min="100000" max="5000000" step="50000" value="300000"></div>
+          <div><span class="label" id="goalLabel">Goal</span><div class="chips" id="goals" role="group" aria-labelledby="goalLabel">
+            <button class="chip" data-goal="sales" aria-pressed="true">Sales</button><button class="chip" data-goal="leads" aria-pressed="false">Leads</button></div>
+            <div class="field" id="aovField" style="margin-top:12px"><label class="label" for="aov">Average order value (₦)</label><input id="aov" type="number" inputmode="numeric" min="500" step="500" value="25000"></div>
+          </div>
+        </div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="chartbox">
+        <div class="legend"><span><i style="background:var(--spend)"></i>Ad spend</span><span><i style="background:var(--profit)"></i><span id="legendOut">Revenue</span></span><span>Shaded band = low to high estimate</span></div>
+        <canvas id="chart" role="img" aria-label="Projected cumulative spend and results over 30 days"></canvas>
+      </div>
+      <details class="assume"><summary>Show the maths (edit the assumptions)</summary>
+        <div class="assume-grid">
+          <div class="field"><label class="label" for="aCpm">CPM (₦ per 1,000 views)</label><input id="aCpm" type="number" min="100" step="50"></div>
+          <div class="field"><label class="label" for="aCtr">Click rate (%)</label><input id="aCtr" type="number" min="0.1" step="0.1"></div>
+          <div class="field"><label class="label" for="aCvr">Conversion rate (%)</label><input id="aCvr" type="number" min="0.1" step="0.1"></div>
+        </div>
+        <p>Views = budget ÷ CPM × 1,000. Clicks = views × click rate. Results = clicks × conversion rate. The low and high figures are 30% either side. These are starting assumptions for planning; your real numbers come from your own account after the first week of data.</p>
+      </details>
+    </div>
+
+    <div class="console" id="school" hidden aria-label="Training tracks">
+      <div class="console-head"><span class="label">Pick a track</span><span class="pill">6 programmes</span></div>
+      <div class="tracks" id="tracks"></div>
+    </div>
+  </div>
+</div></div>
+
+<section class="sec" id="build"><div class="wrap">
+  <p class="label">Campaign structure</p>
+  <h2 style="margin-top:10px">An ad is the last thing we build.</h2>
+  <p class="intro">Traffic sent to a weak page burns budget. So we own the whole chain, in this order, and each part is live before the next one starts.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Layer</th><th>What you get</th><th>Delivery</th><th>Why it comes here</th></tr></thead>
+    <tbody>
+      <tr><td>Brand</td><td>Logo, colours, type, ad-ready templates</td><td class="mono">5–10 working days</td><td>People buy from names they recognise on the second view.</td></tr>
+      <tr><td>Website</td><td>WordPress or WooCommerce site, mobile first, payment and WhatsApp wired in</td><td class="mono">2–4 weeks</td><td>The page decides whether a click becomes money.</td></tr>
+      <tr><td>Funnel</td><td>Sales page, lead capture, email and WhatsApp follow-up</td><td class="mono">with the site</td><td>Most buyers need more than one touch.</td></tr>
+      <tr><td>Tracking</td><td>Pixel, conversion events, analytics dashboard</td><td class="mono">3–5 working days</td><td>No tracking, no optimisation. You see every number we see.</td></tr>
+      <tr><td>Ads</td><td>Meta, Google and TikTok campaigns, creative, testing, scaling</td><td class="mono">3–5 working days</td><td>Now the budget has somewhere worth sending people.</td></tr>
+    </tbody>
+  </table></div>
+  <a class="more" href="/packages/">See every package and build your plan →</a>
+</div></section>
+
+<section class="sec band" id="days"><div class="wrap">
+  <p class="label">Your first 30 days</p>
+  <h2 style="margin-top:10px">What happens after you say yes.</h2>
+  <ol class="timeline">
+    <li><span class="day">Day 0</span><h3>Strategy call</h3><p>Free, 30 minutes. We look at your offer, your numbers and your market, and tell you what we would and would not do.</p></li>
+    <li><span class="day">Days 1–5</span><h3>Setup</h3><p>Ad accounts structured, tracking installed and tested, first creative produced.</p></li>
+    <li><span class="day">Launch day</span><h3>Go live</h3><p>Campaigns start. Paid ads can bring the first leads the same day.</p></li>
+    <li><span class="day">Day 2–3</span><h3>First real data</h3><p>Within 24–48 hours there is enough to read. We cut what is weak and feed what works.</p></li>
+    <li><span class="day">Day 30</span><h3>Report and next step</h3><p>Performance report and a call. You decide whether to scale, hold or stop.</p></li>
+  </ol>
+</div></section>
+
+<section class="sec" id="proof"><div class="wrap">
+  <p class="label">Proof</p>
+  <h2 style="margin-top:10px">Real accounts. Real numbers.</h2>
+  <p class="intro">Figures straight from Meta Ads Manager: what was spent and what came back.</p>
+  <a class="more" href="/portfolio/" style="margin-top:14px">How we report results →</a>
+  <div class="proof"><div class="case"><p class="label">Games tables · 4 campaigns</p><p class="big mono">383</p><p class="what">buyer conversations on WhatsApp</p>
+    <dl><dt>Cost</dt><dd class="mono">₦486 per conversation</dd><dt>Spend</dt><dd class="mono">₦186,146</dd><dt>Views</dt><dd class="mono">148,931</dd><dt>How</dt><dd>Snooker and table tennis tables. Sales campaign, orders taken on WhatsApp</dd></dl></div><div class="case"><p class="label">4-in-1 product, e-commerce brand · 5 campaigns</p><p class="big mono">479</p><p class="what">buyer conversations on WhatsApp</p>
+    <dl><dt>Cost</dt><dd class="mono">₦395 per conversation</dd><dt>Spend</dt><dd class="mono">₦188,971</dd><dt>Views</dt><dd class="mono">139,268</dd><dt>How</dt><dd>Sales campaign, orders taken on WhatsApp</dd></dl></div><div class="case"><p class="label">Home treadmills · 9 campaigns</p><p class="big mono">311</p><p class="what">buyer conversations on WhatsApp</p>
+    <dl><dt>Cost</dt><dd class="mono">₦878 per conversation</dd><dt>Spend</dt><dd class="mono">₦273,135</dd><dt>Views</dt><dd class="mono">150,366</dd><dt>How</dt><dd>Sales campaign, orders taken on WhatsApp</dd></dl></div></div>
+  <p class="src">Source: Meta Ads Manager, lifetime totals read on 12 November 2026. Client names withheld.</p>
+</div></section>
+
+<section class="sec" id="founder"><div class="wrap">
+  <div class="founder">
+    <blockquote>We don't run ads. We build <span>revenue systems.</span></blockquote>
+    <div class="who">
+      <p class="label">Who runs your account</p>
+      <h3 style="font-size:30px">Ademola Adeniran</h3>
+      <p>Founder, performance marketer and media buyer. Six years running Meta and Google campaigns, building each one backwards from the revenue target. You talk to the person doing the work.</p>
+      <div class="niches"><span>Health &amp; beauty</span><span>Gadgets &amp; tech</span><span>Security</span><span>FMCG</span><span>Real estate</span><span>Education</span><span>Food</span><span>Affiliate</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="training"><div class="wrap">
+  <p class="label">Training</p>
+  <h2 style="margin-top:10px">Or learn to run it yourself.</h2>
+  <p class="intro">Six programmes taught by people who use these skills on client accounts every day. Video lessons, lifetime access, a certificate when you finish.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Programme</th><th>You will be able to</th><th>Level</th><th>Lessons</th><th>Length</th></tr></thead>
+    <tbody id="courseRows"></tbody>
+  </table></div>
+  <a class="more" href="/training/">See every curriculum →</a>
+</div></section>
+
+<section class="sec" id="faq"><div class="wrap">
+  <p class="label">Before you ask</p>
+  <h2 style="margin-top:10px">Straight answers.</h2>
+  <div class="faq">
+    <details open><summary>What is the smallest budget you work with?</summary><p>₦100,000 a month in ad spend, or the equivalent in dollars. Below that there is not enough data to optimise.</p></details>
+    <details><summary>Is ad spend part of your fee?</summary><p>No. You pay Meta, Google or TikTok directly for ads. Our fee covers strategy, setup, creative, management and reporting.</p></details>
+    <details><summary>Can I take one service only?</summary><p>Yes. Take one layer or the whole system. Larger projects can be paid 50% up front and 50% on delivery.</p></details>
+    <details><summary>Do you work outside Nigeria?</summary><p>Yes. We work remotely with clients across Africa, the UK, the US and Canada.</p></details>
+    <details><summary>How fast do you reply?</summary><p>Within one hour during business hours, on WhatsApp or email.</p></details>
+  </div>
+</div></section>
+
+<section class="sec" id="send"><div class="wrap">
+  <p class="label">Start</p>
+  <h2 style="margin-top:10px">Your plan is already written.</h2>
+  <div class="handoff">
+    <div>
+      <p class="intro" style="margin-top:0">This is the message the console built from your choices. Change anything above and it updates. Send it and the conversation starts with your numbers, not with "hello".</p>
+      <div class="btnrow"><a class="btn" id="waBtn" target="_blank" rel="noopener">Send on WhatsApp</a><button class="btn ghost" id="copyBtn">Copy message</button></div>
+      <div class="contact"><span>WhatsApp / call: +234 706 615 3757</span><span>Email: hello@demoskidigital.com</span></div>
+    </div>
+    <div class="msg" id="msg" tabindex="0"></div>
+  </div>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <span>© 2026 Demoski Digital Agency · Nigeria and worldwide</span>
+  <span><a href="/packages/">Packages</a> · <a href="/training/">Training</a> · <a href="/portfolio/">Proof</a> · <a href="/about/">About</a></span>
+  <span>WhatsApp +234 706 615 3757 · <a href="mailto:hello@demoskidigital.com">hello@demoskidigital.com</a></span>
+</div></footer>
+<div class="bar" role="region" aria-label="Contact"><span class="sum" id="barSum"></span><a class="btn" id="barBtn" data-wa="" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
+<script src="/assets/planner.js" defer></script>
+</body>
+</html>

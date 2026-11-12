@@ -1,0 +1,37 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/sample-page/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/elementor-173/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/fresh-page/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/blog/",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
+  ]
+}
