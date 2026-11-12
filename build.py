@@ -126,7 +126,7 @@ SITE_JS = r"""
 })();
 """
 
-NAV = [("/", "Planner"), ("/packages/", "Packages"), ("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel"), ("/affiliate/", "Affiliates"), ("/portfolio/", "Proof"), ("/about/", "About")]
+NAV = [("/", "Planner"), ("/packages/", "Packages"), ("/done-for-you/", "Done-For-You"), ("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel"), ("/affiliate/", "Affiliates"), ("/portfolio/", "Proof")]
 WP = "https://demoskidigital.com"  # pages still served by WordPress; change to the subdomain at launch
 OFFERS = [("/done-for-you/", "Done-For-You Setup", "Your whole system built in 14 days"),
         ("/autobuild-funnel/", "AutoBuild", "Funnel-building course"),
@@ -134,7 +134,7 @@ OFFERS = [("/done-for-you/", "Done-For-You Setup", "Your whole system built in 1
         ("/affiliate/", "Affiliates", "Earn 20% per referral"),
         (WP + "/template-bundle-customizer/", "Template Bundle", "54 ready-made business templates"),
         (WP + "/course-os/", "Course OS", "Course platform for creators")]
-MORE = [o for o in OFFERS if o[1] in ("Done-For-You Setup", "Template Bundle", "Course OS")]
+MORE = [("/about/", "About", "Who runs your account")] + [o for o in OFFERS if o[1] in ("Template Bundle", "Course OS")]
 FOOT = [("Agency", [("/", "Campaign planner"), ("/packages/", "Packages"), ("/done-for-you/", "Done-For-You Setup"), ("/portfolio/", "Proof"), ("/about/", "About")]),
         ("Learn", [("/training/", "Training"), ("/autobuild-funnel/", "AutoBuild"), ("/ai-funnel-generator/", "AI Funnel Accelerator")]),
         ("Products", [(WP + "/template-bundle-customizer/", "Template Bundle"), (WP + "/course-os/", "Course OS"), ("/affiliate/", "Affiliates")])]
